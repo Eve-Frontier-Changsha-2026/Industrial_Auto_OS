@@ -1,5 +1,9 @@
 # 專案名稱：Industrial_Auto_OS (星際工業自動化排程作業系統)
 
+> 📜 **[EVE Frontier 專案憲法與開發準則](https://github.com/Eve-Frontier-Changsha-2026/Constitution/blob/master/EVE_Frontier_Project_Constitution.md)**
+> 本專案的世界觀設定與底層相依資源，均遵從此憲法文檔之規範。
+
+
 ## 📌 概念簡介
 專為喜愛「採集、建設、生產」的軍工複合體玩家/公會所設計的管理工具，將基地變成「可程式化工廠」。利用 Sui 的可組合性 (Composability)，將輸入原料、排程加工、入庫、轉運自動化，同時提供玩家自定義「生產配方 (recipe)」與觸發條件（例如礦物過半自動精煉）。
 
