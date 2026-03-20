@@ -1,0 +1,10 @@
+[package]
+name = "marketplace"
+edition = "2024.beta"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "072a2111619715c3348d1b83c0526c3bcfa5cdd1" }
+industrial_core = { local = "../industrial_core" }
+
+[addresses]
+marketplace = "0x0"
