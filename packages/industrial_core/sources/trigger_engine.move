@@ -42,7 +42,7 @@ public struct TriggerFiredEvent has copy, drop {
 // === Functions ===
 
 /// Create a trigger rule. Only the production line owner can create rules.
-public entry fun create_trigger_rule(
+public fun create_trigger_rule(
     line: &ProductionLine,
     condition_type: u8,
     threshold: u64,

@@ -72,7 +72,7 @@ fun require_owner_or_operator(line: &ProductionLine, ctx: &TxContext) {
 // === Entry Functions ===
 
 /// Create a new production line as a shared object.
-public entry fun create_production_line(
+public fun create_production_line(
     name: String,
     recipe_id: ID,
     ctx: &mut TxContext,
@@ -95,7 +95,7 @@ public entry fun create_production_line(
 }
 
 /// Owner adds an operator. Max 10 operators.
-public entry fun authorize_operator(
+public fun authorize_operator(
     line: &mut ProductionLine,
     operator: address,
     ctx: &TxContext,
@@ -106,7 +106,7 @@ public entry fun authorize_operator(
 }
 
 /// Owner removes an operator.
-public entry fun revoke_operator(
+public fun revoke_operator(
     line: &mut ProductionLine,
     operator: address,
     ctx: &TxContext,
@@ -116,7 +116,7 @@ public entry fun revoke_operator(
 }
 
 /// Owner deposits materials. Validates item_type_id against recipe inputs.
-public entry fun deposit_materials(
+public fun deposit_materials(
     line: &mut ProductionLine,
     recipe: &Recipe,
     item_type_id: u32,
@@ -129,7 +129,7 @@ public entry fun deposit_materials(
 }
 
 /// Owner deposits fuel.
-public entry fun deposit_fuel(
+public fun deposit_fuel(
     line: &mut ProductionLine,
     amount: u64,
     ctx: &TxContext,
@@ -139,7 +139,7 @@ public entry fun deposit_fuel(
 }
 
 /// Owner withdraws output. Operator cannot.
-public entry fun withdraw_output(
+public fun withdraw_output(
     line: &mut ProductionLine,
     item_type_id: u32,
     quantity: u64,
