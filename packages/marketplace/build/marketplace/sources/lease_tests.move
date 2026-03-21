@@ -46,6 +46,7 @@ fun test_create_lease_wraps_bpo() {
         assert!(lease::expiry(&agreement) == 9999999);
         assert!(lease::daily_rate(&agreement) == 100_000);
         assert!(lease::deposit_value(&agreement) == 1_000_000);
+        assert!(lease::is_active(&agreement) == true);
         test_scenario::return_shared(agreement);
     };
     scenario.end();
@@ -67,8 +68,10 @@ fun test_return_lease_by_lessee() {
 
     scenario.next_tx(LESSEE);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
-        lease::return_lease(agreement, scenario.ctx());
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        assert!(lease::is_active(&agreement) == false);
+        test_scenario::return_shared(agreement);
     };
 
     // BPO should go to LESSOR
@@ -103,8 +106,9 @@ fun test_return_lease_by_non_lessee() {
 
     scenario.next_tx(STRANGER); // STRANGER tries to return
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
-        lease::return_lease(agreement, scenario.ctx());
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }
@@ -125,12 +129,14 @@ fun test_forfeit_lease_by_lessor_after_expiry() {
 
     scenario.next_tx(LESSOR);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         // Clock at 2000 ms > expiry 1000
         let mut clk = clock::create_for_testing(scenario.ctx());
         clock::set_for_testing(&mut clk, 2000);
-        lease::forfeit_lease(agreement, &clk, scenario.ctx());
+        lease::forfeit_lease(&mut agreement, &clk, scenario.ctx());
+        assert!(lease::is_active(&agreement) == false);
         clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
     };
 
     // LESSOR gets BPO
@@ -160,12 +166,13 @@ fun test_forfeit_lease_before_expiry() {
 
     scenario.next_tx(LESSOR);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         // Clock at 1000 ms < expiry
         let mut clk = clock::create_for_testing(scenario.ctx());
         clock::set_for_testing(&mut clk, 1000);
-        lease::forfeit_lease(agreement, &clk, scenario.ctx());
+        lease::forfeit_lease(&mut agreement, &clk, scenario.ctx());
         clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }
@@ -184,11 +191,12 @@ fun test_forfeit_by_non_lessor() {
 
     scenario.next_tx(STRANGER); // STRANGER tries to forfeit
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         let mut clk = clock::create_for_testing(scenario.ctx());
         clock::set_for_testing(&mut clk, 2000);
-        lease::forfeit_lease(agreement, &clk, scenario.ctx());
+        lease::forfeit_lease(&mut agreement, &clk, scenario.ctx());
         clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }

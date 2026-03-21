@@ -1,3 +1,4 @@
+#[test_only]
 module industrial_core::mock_fuel;
 
 use industrial_core::production_line::{Self, ProductionLine};

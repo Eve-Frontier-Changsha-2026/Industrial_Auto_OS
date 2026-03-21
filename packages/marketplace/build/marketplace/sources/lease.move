@@ -4,12 +4,17 @@ use sui::balance::{Self, Balance};
 use sui::clock::Clock;
 use sui::coin::{Self, Coin};
 use sui::sui::SUI;
+use sui::dynamic_object_field as dof;
 use industrial_core::blueprint::BlueprintOriginal;
 
 // === Error Codes ===
 const E_NOT_LESSEE: u64 = 300;
 const E_NOT_LESSOR: u64 = 301;
 const E_LEASE_NOT_EXPIRED: u64 = 302;
+const E_LEASE_INACTIVE: u64 = 303;
+
+// === DOF Key ===
+public struct LeasedBpoKey has copy, drop, store {}
 
 // === Structs ===
 
@@ -17,10 +22,10 @@ public struct LeaseAgreement has key {
     id: UID,
     lessor: address,
     lessee: address,
-    bpo: BlueprintOriginal,
     deposit: Balance<SUI>,
     expiry: u64,
     daily_rate: u64,
+    active: bool,
 }
 
 // === Events ===
@@ -48,6 +53,7 @@ public struct LeaseForfeited has copy, drop {
 // === Functions ===
 
 /// Create a lease agreement. Lessor wraps BPO and sets terms.
+/// BPO is stored as a dynamic object field on the lease.
 public fun create_lease(
     bpo: BlueprintOriginal,
     lessee: address,
@@ -57,15 +63,16 @@ public fun create_lease(
     ctx: &mut TxContext,
 ) {
     let lessor = ctx.sender();
-    let lease = LeaseAgreement {
+    let mut lease = LeaseAgreement {
         id: object::new(ctx),
         lessor,
         lessee,
-        bpo,
         deposit: coin::into_balance(deposit_coin),
         expiry,
         daily_rate,
+        active: true,
     };
+    dof::add(&mut lease.id, LeasedBpoKey {}, bpo);
     let lease_id = object::id(&lease);
     sui::event::emit(LeaseCreated {
         lease_id,
@@ -78,34 +85,46 @@ public fun create_lease(
 }
 
 /// Lessee returns BPO before expiry. BPO goes to lessor, deposit returned to lessee.
-public fun return_lease(lease: LeaseAgreement, ctx: &mut TxContext) {
+public fun return_lease(lease: &mut LeaseAgreement, ctx: &mut TxContext) {
+    assert!(lease.active, E_LEASE_INACTIVE);
     assert!(ctx.sender() == lease.lessee, E_NOT_LESSEE);
 
-    let LeaseAgreement { id, lessor, lessee, bpo, deposit, expiry: _, daily_rate: _ } = lease;
-    let lease_id = id.to_inner();
+    lease.active = false;
+    let lease_id = lease.id.to_inner();
+    let lessor = lease.lessor;
+    let lessee = lease.lessee;
 
     sui::event::emit(LeaseReturned { lease_id, lessor, lessee });
 
+    let bpo: BlueprintOriginal = dof::remove(&mut lease.id, LeasedBpoKey {});
     transfer::public_transfer(bpo, lessor);
-    let deposit_coin = coin::from_balance(deposit, ctx);
+
+    let amount = balance::value(&lease.deposit);
+    let deposit_bal = balance::split(&mut lease.deposit, amount);
+    let deposit_coin = coin::from_balance(deposit_bal, ctx);
     transfer::public_transfer(deposit_coin, lessee);
-    id.delete();
 }
 
 /// Lessor forfeits lease after expiry. BPO and deposit both go to lessor.
-public fun forfeit_lease(lease: LeaseAgreement, clock: &Clock, ctx: &mut TxContext) {
+public fun forfeit_lease(lease: &mut LeaseAgreement, clock: &Clock, ctx: &mut TxContext) {
+    assert!(lease.active, E_LEASE_INACTIVE);
     assert!(ctx.sender() == lease.lessor, E_NOT_LESSOR);
     assert!(clock.timestamp_ms() > lease.expiry, E_LEASE_NOT_EXPIRED);
 
-    let LeaseAgreement { id, lessor, lessee, bpo, deposit, expiry: _, daily_rate: _ } = lease;
-    let lease_id = id.to_inner();
+    lease.active = false;
+    let lease_id = lease.id.to_inner();
+    let lessor = lease.lessor;
+    let lessee = lease.lessee;
 
     sui::event::emit(LeaseForfeited { lease_id, lessor, lessee });
 
+    let bpo: BlueprintOriginal = dof::remove(&mut lease.id, LeasedBpoKey {});
     transfer::public_transfer(bpo, lessor);
-    let deposit_coin = coin::from_balance(deposit, ctx);
+
+    let amount = balance::value(&lease.deposit);
+    let deposit_bal = balance::split(&mut lease.deposit, amount);
+    let deposit_coin = coin::from_balance(deposit_bal, ctx);
     transfer::public_transfer(deposit_coin, lessor);
-    id.delete();
 }
 
 // === Accessors ===
@@ -115,3 +134,4 @@ public fun lessee(lease: &LeaseAgreement): address { lease.lessee }
 public fun expiry(lease: &LeaseAgreement): u64 { lease.expiry }
 public fun daily_rate(lease: &LeaseAgreement): u64 { lease.daily_rate }
 public fun deposit_value(lease: &LeaseAgreement): u64 { balance::value(&lease.deposit) }
+public fun is_active(lease: &LeaseAgreement): bool { lease.active }

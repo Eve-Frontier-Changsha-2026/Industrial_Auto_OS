@@ -141,10 +141,11 @@ fun monkey_buy_bpo_insufficient_payment() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(9_999_999, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -170,10 +171,11 @@ fun monkey_buy_bpo_zero_coin() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(0, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -201,10 +203,11 @@ fun monkey_buy_bpc_insufficient_payment() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpcListing>();
+        let mut listing = scenario.take_shared<BpcListing>();
         let mut payment = coin::mint_for_testing<SUI>(1, scenario.ctx());
-        marketplace::buy_bpc(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpc(&mut market, &mut listing, &mut payment, scenario.ctx());
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -235,9 +238,10 @@ fun monkey_delist_bpc_by_attacker() {
 
     scenario.next_tx(ATTACKER);
     {
-        let listing = scenario.take_shared<BpcListing>();
-        let bpc = marketplace::delist_bpc(listing, scenario.ctx());
+        let mut listing = scenario.take_shared<BpcListing>();
+        let bpc = marketplace::delist_bpc(&mut listing, scenario.ctx());
         destroy(bpc);
+        test_scenario::return_shared(listing);
     };
     scenario.end();
 }
@@ -261,9 +265,10 @@ fun monkey_delist_bpo_by_buyer() {
 
     scenario.next_tx(BUYER);
     {
-        let listing = scenario.take_shared<BpoListing>();
-        let bpo = marketplace::delist_bpo(listing, scenario.ctx());
+        let mut listing = scenario.take_shared<BpoListing>();
+        let bpo = marketplace::delist_bpo(&mut listing, scenario.ctx());
         destroy(bpo);
+        test_scenario::return_shared(listing);
     };
     scenario.end();
 }
@@ -302,12 +307,13 @@ fun monkey_fee_at_max_boundary() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(10_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         // fee = 10_000_000 * 1000 / 10000 = 1_000_000
         assert!(marketplace::collected_fees_value(&market) == 1_000_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
 
@@ -386,12 +392,13 @@ fun monkey_fee_zero_bps_min_fee_enforced() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpcListing>();
+        let mut listing = scenario.take_shared<BpcListing>();
         let mut payment = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
-        marketplace::buy_bpc(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpc(&mut market, &mut listing, &mut payment, scenario.ctx());
         // fee_bps=0, price*0/10000=0 → enforced min fee = 1
         assert!(marketplace::collected_fees_value(&market) == 1);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -422,8 +429,9 @@ fun monkey_list_delist_relist_bpo() {
     scenario.next_tx(SELLER);
     let bpo_returned;
     {
-        let listing = scenario.take_shared<BpoListing>();
-        bpo_returned = marketplace::delist_bpo(listing, scenario.ctx());
+        let mut listing = scenario.take_shared<BpoListing>();
+        bpo_returned = marketplace::delist_bpo(&mut listing, scenario.ctx());
+        test_scenario::return_shared(listing);
     };
 
     // Relist at different price
@@ -434,11 +442,14 @@ fun monkey_list_delist_relist_bpo() {
         test_scenario::return_shared(market);
     };
 
-    // Verify new listing
+    // Verify new listing — there are now 2 shared BpoListings (old tombstone + new)
+    // We need the active one. take_shared gets the most recently created one.
     scenario.next_tx(SELLER);
     {
+        // The new listing should be active
         let listing = scenario.take_shared<BpoListing>();
         assert!(marketplace::bpo_listing_price(&listing) == 8_000_000);
+        assert!(marketplace::bpo_listing_active(&listing) == true);
         test_scenario::return_shared(listing);
     };
     scenario.end();
@@ -463,13 +474,14 @@ fun monkey_buy_bpo_massive_overpayment() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         // Overpay by 1000x
         let mut payment = coin::mint_for_testing<SUI>(1_000_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         // remaining = 1_000_000_000 - 1_000_000 = 999_000_000
         assert!(coin::value(&payment) == 999_000_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -515,11 +527,12 @@ fun monkey_multiple_buys_accumulate_fees() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(10_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         assert!(marketplace::collected_fees_value(&market) == 250_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
 
@@ -538,12 +551,13 @@ fun monkey_multiple_buys_accumulate_fees() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(20_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         // accumulated: 250_000 + 500_000 = 750_000
         assert!(marketplace::collected_fees_value(&market) == 750_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -609,11 +623,12 @@ fun monkey_lease_expiry_zero_instant_forfeit() {
 
     scenario.next_tx(LESSOR);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         let mut clk = clock::create_for_testing(scenario.ctx());
         clock::set_for_testing(&mut clk, 1); // 1ms > 0
-        lease::forfeit_lease(agreement, &clk, scenario.ctx());
+        lease::forfeit_lease(&mut agreement, &clk, scenario.ctx());
         clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
     };
 
     scenario.next_tx(LESSOR);
@@ -642,11 +657,12 @@ fun monkey_forfeit_at_exact_expiry_boundary() {
 
     scenario.next_tx(LESSOR);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         let mut clk = clock::create_for_testing(scenario.ctx());
         clock::set_for_testing(&mut clk, 5000); // exactly at expiry, NOT past
-        lease::forfeit_lease(agreement, &clk, scenario.ctx());
+        lease::forfeit_lease(&mut agreement, &clk, scenario.ctx());
         clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }
@@ -666,11 +682,12 @@ fun monkey_lessee_tries_to_forfeit() {
 
     scenario.next_tx(LESSEE); // Lessee, not lessor
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         let mut clk = clock::create_for_testing(scenario.ctx());
         clock::set_for_testing(&mut clk, 2000);
-        lease::forfeit_lease(agreement, &clk, scenario.ctx());
+        lease::forfeit_lease(&mut agreement, &clk, scenario.ctx());
         clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }
@@ -690,8 +707,9 @@ fun monkey_lessor_tries_to_return() {
 
     scenario.next_tx(LESSOR); // Lessor, not lessee
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
-        lease::return_lease(agreement, scenario.ctx());
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }
@@ -710,9 +728,10 @@ fun monkey_lease_max_u64_expiry_return() {
 
     scenario.next_tx(LESSEE);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
         assert!(lease::expiry(&agreement) == 18446744073709551615);
-        lease::return_lease(agreement, scenario.ctx());
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
     };
 
     scenario.next_tx(LESSEE);
@@ -738,8 +757,9 @@ fun monkey_lease_zero_deposit_return() {
 
     scenario.next_tx(LESSEE);
     {
-        let agreement = scenario.take_shared<LeaseAgreement>();
-        lease::return_lease(agreement, scenario.ctx());
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
     };
 
     // Deposit coin of 0 goes to lessee
@@ -748,6 +768,121 @@ fun monkey_lease_zero_deposit_return() {
         let deposit_coin = scenario.take_from_sender<Coin<SUI>>();
         assert!(coin::value(&deposit_coin) == 0);
         scenario.return_to_sender(deposit_coin);
+    };
+    scenario.end();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Tombstone — Double-action prevention
+// ═══════════════════════════════════════════════════════════════════
+
+/// Buy an already-bought listing (inactive) → must abort E_LISTING_INACTIVE
+#[test]
+#[expected_failure(abort_code = 204)]
+fun monkey_buy_inactive_bpo_listing() {
+    let mut scenario = test_scenario::begin(ADMIN);
+    marketplace::test_init(scenario.ctx());
+
+    scenario.next_tx(SELLER);
+    {
+        let market = scenario.take_shared<Marketplace>();
+        let r = make_test_recipe(scenario.ctx());
+        let bpo = blueprint::mint_bpo(&r, 10, 5, 5, scenario.ctx());
+        marketplace::list_bpo(&market, bpo, 1_000_000, scenario.ctx());
+        destroy(r);
+        test_scenario::return_shared(market);
+    };
+
+    // First buy succeeds
+    scenario.next_tx(BUYER);
+    {
+        let mut market = scenario.take_shared<Marketplace>();
+        let mut listing = scenario.take_shared<BpoListing>();
+        let mut payment = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
+        destroy(payment);
+        test_scenario::return_shared(listing);
+        test_scenario::return_shared(market);
+    };
+
+    // Second buy on same listing → abort
+    scenario.next_tx(ATTACKER);
+    {
+        let mut market = scenario.take_shared<Marketplace>();
+        let mut listing = scenario.take_shared<BpoListing>();
+        let mut payment = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
+        destroy(payment);
+        test_scenario::return_shared(listing);
+        test_scenario::return_shared(market);
+    };
+    scenario.end();
+}
+
+/// Delist an already-delisted listing → must abort E_LISTING_INACTIVE
+#[test]
+#[expected_failure(abort_code = 204)]
+fun monkey_delist_inactive_bpo_listing() {
+    let mut scenario = test_scenario::begin(ADMIN);
+    marketplace::test_init(scenario.ctx());
+
+    scenario.next_tx(SELLER);
+    {
+        let market = scenario.take_shared<Marketplace>();
+        let r = make_test_recipe(scenario.ctx());
+        let bpo = blueprint::mint_bpo(&r, 10, 5, 5, scenario.ctx());
+        marketplace::list_bpo(&market, bpo, 1_000_000, scenario.ctx());
+        destroy(r);
+        test_scenario::return_shared(market);
+    };
+
+    // First delist succeeds
+    scenario.next_tx(SELLER);
+    {
+        let mut listing = scenario.take_shared<BpoListing>();
+        let bpo = marketplace::delist_bpo(&mut listing, scenario.ctx());
+        destroy(bpo);
+        test_scenario::return_shared(listing);
+    };
+
+    // Second delist on same listing → abort
+    scenario.next_tx(SELLER);
+    {
+        let mut listing = scenario.take_shared<BpoListing>();
+        let bpo = marketplace::delist_bpo(&mut listing, scenario.ctx());
+        destroy(bpo);
+        test_scenario::return_shared(listing);
+    };
+    scenario.end();
+}
+
+/// Return an already-returned lease → must abort E_LEASE_INACTIVE
+#[test]
+#[expected_failure(abort_code = 303)]
+fun monkey_return_inactive_lease() {
+    let mut scenario = test_scenario::begin(LESSOR);
+    {
+        let r = make_test_recipe(scenario.ctx());
+        let bpo = blueprint::mint_bpo(&r, 10, 5, 5, scenario.ctx());
+        let deposit = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        lease::create_lease(bpo, LESSEE, deposit, 999_999_999, 100_000, scenario.ctx());
+        destroy(r);
+    };
+
+    // First return succeeds
+    scenario.next_tx(LESSEE);
+    {
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
+    };
+
+    // Second return on same lease → abort
+    scenario.next_tx(LESSEE);
+    {
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
     };
     scenario.end();
 }

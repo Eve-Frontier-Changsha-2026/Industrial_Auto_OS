@@ -170,7 +170,8 @@ public fun start_production(
 }
 
 /// Start production using BPC efficiency values (from use_bpc result).
-public fun start_production_with_efficiency(
+/// Package-internal only — prevents PTB from passing arbitrary ME/TE.
+public(package) fun start_production_with_efficiency(
     line: &mut ProductionLine,
     recipe: &Recipe,
     me: u8,
