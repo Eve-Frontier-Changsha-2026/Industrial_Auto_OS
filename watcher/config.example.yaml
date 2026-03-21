@@ -1,0 +1,59 @@
+network: testnet
+
+package_ids:
+  industrial_core: "0x..."
+  work_order: "0x..."
+  marketplace: "0x..."
+
+signer:
+  type: single
+  keypath: ~/.sui/sui.keystore
+
+watch:
+  poll_interval_ms: 5000
+  production_line_ids:
+    - "0x..."
+  work_order_board_id: "0x..."
+  marketplace_id: "0x..."
+  item_type_ids: [1, 2, 3]
+
+gas:
+  pool_size: 20
+  min_balance_warn: 100000000
+  min_coin_balance: 5000000
+  auto_replenish: true
+
+rules:
+  trigger_evaluator:
+    enabled: true
+    production_line_ids: ["0x..."]
+    trigger_rule_ids: ["0x..."]
+  auto_restock:
+    enabled: true
+    threshold: 10
+    production_line_ids: ["0x..."]
+    recipe_id: "0x..."
+    blueprint_id: "0x..."
+  output_withdrawer:
+    enabled: true
+  order_acceptor:
+    enabled: true
+    max_escrow: 5000000000
+    recipe_ids: []
+  order_completer:
+    enabled: true
+  auto_complete:
+    enabled: true
+  expired_cleaner:
+    enabled: true
+  lease_forfeiter:
+    enabled: true
+  fleet_damage:
+    enabled: true
+    production_line_id: "0x..."
+    recipe_id: "0x..."
+    blueprint_id: "0x..."
+  production_completer:
+    enabled: true
+  delivery_handler:
+    enabled: true
