@@ -3,6 +3,7 @@ module marketplace::marketplace;
 use sui::balance::{Self, Balance};
 use sui::coin::{Self, Coin};
 use sui::sui::SUI;
+use sui::dynamic_object_field as dof;
 use industrial_core::blueprint::{BlueprintOriginal, BlueprintCopy};
 
 // === Error Codes ===
@@ -10,11 +11,16 @@ const E_LISTING_PRICE_TOO_LOW: u64 = 200;
 const E_NOT_SELLER: u64 = 201;
 const E_INSUFFICIENT_PAYMENT: u64 = 202;
 const E_FEE_TOO_HIGH: u64 = 203;
+const E_LISTING_INACTIVE: u64 = 204;
 
 // === Constants ===
 const MIN_PRICE: u64 = 1_000_000;
 const DEFAULT_FEE_BPS: u64 = 250;
 const MAX_FEE_BPS: u64 = 1000;
+
+// === DOF Key Types ===
+public struct ListedBpo has copy, drop, store {}
+public struct ListedBpc has copy, drop, store {}
 
 // === Structs ===
 
@@ -31,15 +37,15 @@ public struct Marketplace has key {
 public struct BpoListing has key {
     id: UID,
     seller: address,
-    bpo: BlueprintOriginal,
     price: u64,
+    active: bool,
 }
 
 public struct BpcListing has key {
     id: UID,
     seller: address,
-    bpc: BlueprintCopy,
     price: u64,
+    active: bool,
 }
 
 // === Events ===
@@ -124,6 +130,7 @@ public fun withdraw_fees(
 // === BPO Listing ===
 
 /// List a BPO for sale. Price must be >= MIN_PRICE.
+/// BPO is stored as a dynamic object field on the listing.
 public fun list_bpo(
     _market: &Marketplace,
     bpo: BlueprintOriginal,
@@ -132,12 +139,13 @@ public fun list_bpo(
 ) {
     assert!(price >= MIN_PRICE, E_LISTING_PRICE_TOO_LOW);
     let bpo_id = object::id(&bpo);
-    let listing = BpoListing {
+    let mut listing = BpoListing {
         id: object::new(ctx),
         seller: ctx.sender(),
-        bpo,
         price,
+        active: true,
     };
+    dof::add(&mut listing.id, ListedBpo {}, bpo);
     let listing_id = object::id(&listing);
     sui::event::emit(BpoListed {
         listing_id,
@@ -149,22 +157,23 @@ public fun list_bpo(
 }
 
 /// Delist a BPO listing. Only seller can delist.
-public fun delist_bpo(listing: BpoListing, ctx: &TxContext): BlueprintOriginal {
+public fun delist_bpo(listing: &mut BpoListing, ctx: &TxContext): BlueprintOriginal {
+    assert!(listing.active, E_LISTING_INACTIVE);
     assert!(ctx.sender() == listing.seller, E_NOT_SELLER);
-    let BpoListing { id, seller, bpo, price: _ } = listing;
-    let listing_id = id.to_inner();
-    sui::event::emit(BpoDelisted { listing_id, seller });
-    id.delete();
-    bpo
+    listing.active = false;
+    let listing_id = listing.id.to_inner();
+    sui::event::emit(BpoDelisted { listing_id, seller: listing.seller });
+    dof::remove(&mut listing.id, ListedBpo {})
 }
 
 /// Buy a BPO. Payment coin is debited by listing price; fee goes to marketplace.
 public fun buy_bpo(
     market: &mut Marketplace,
-    listing: BpoListing,
+    listing: &mut BpoListing,
     payment: &mut Coin<SUI>,
     ctx: &mut TxContext,
 ) {
+    assert!(listing.active, E_LISTING_INACTIVE);
     let price = listing.price;
     assert!(coin::value(payment) >= price, E_INSUFFICIENT_PAYMENT);
 
@@ -179,8 +188,10 @@ public fun buy_bpo(
     let seller_amount = price - fee;
     let seller_coin = coin::split(payment, seller_amount, ctx);
 
-    let BpoListing { id, seller, bpo, price: _ } = listing;
-    let listing_id = id.to_inner();
+    listing.active = false;
+    let listing_id = listing.id.to_inner();
+    let seller = listing.seller;
+    let bpo: BlueprintOriginal = dof::remove(&mut listing.id, ListedBpo {});
 
     sui::event::emit(BpoSold {
         listing_id,
@@ -192,12 +203,12 @@ public fun buy_bpo(
 
     transfer::public_transfer(seller_coin, seller);
     transfer::public_transfer(bpo, ctx.sender());
-    id.delete();
 }
 
 // === BPC Listing ===
 
 /// List a BPC for sale. Price must be >= MIN_PRICE.
+/// BPC is stored as a dynamic object field on the listing.
 public fun list_bpc(
     _market: &Marketplace,
     bpc: BlueprintCopy,
@@ -206,12 +217,13 @@ public fun list_bpc(
 ) {
     assert!(price >= MIN_PRICE, E_LISTING_PRICE_TOO_LOW);
     let bpc_id = object::id(&bpc);
-    let listing = BpcListing {
+    let mut listing = BpcListing {
         id: object::new(ctx),
         seller: ctx.sender(),
-        bpc,
         price,
+        active: true,
     };
+    dof::add(&mut listing.id, ListedBpc {}, bpc);
     let listing_id = object::id(&listing);
     sui::event::emit(BpcListed {
         listing_id,
@@ -223,22 +235,23 @@ public fun list_bpc(
 }
 
 /// Delist a BPC listing. Only seller can delist.
-public fun delist_bpc(listing: BpcListing, ctx: &TxContext): BlueprintCopy {
+public fun delist_bpc(listing: &mut BpcListing, ctx: &TxContext): BlueprintCopy {
+    assert!(listing.active, E_LISTING_INACTIVE);
     assert!(ctx.sender() == listing.seller, E_NOT_SELLER);
-    let BpcListing { id, seller, bpc, price: _ } = listing;
-    let listing_id = id.to_inner();
-    sui::event::emit(BpcDelisted { listing_id, seller });
-    id.delete();
-    bpc
+    listing.active = false;
+    let listing_id = listing.id.to_inner();
+    sui::event::emit(BpcDelisted { listing_id, seller: listing.seller });
+    dof::remove(&mut listing.id, ListedBpc {})
 }
 
 /// Buy a BPC. Payment coin is debited by listing price; fee goes to marketplace.
 public fun buy_bpc(
     market: &mut Marketplace,
-    listing: BpcListing,
+    listing: &mut BpcListing,
     payment: &mut Coin<SUI>,
     ctx: &mut TxContext,
 ) {
+    assert!(listing.active, E_LISTING_INACTIVE);
     let price = listing.price;
     assert!(coin::value(payment) >= price, E_INSUFFICIENT_PAYMENT);
 
@@ -253,8 +266,10 @@ public fun buy_bpc(
     let seller_amount = price - fee;
     let seller_coin = coin::split(payment, seller_amount, ctx);
 
-    let BpcListing { id, seller, bpc, price: _ } = listing;
-    let listing_id = id.to_inner();
+    listing.active = false;
+    let listing_id = listing.id.to_inner();
+    let seller = listing.seller;
+    let bpc: BlueprintCopy = dof::remove(&mut listing.id, ListedBpc {});
 
     sui::event::emit(BpcSold {
         listing_id,
@@ -266,7 +281,6 @@ public fun buy_bpc(
 
     transfer::public_transfer(seller_coin, seller);
     transfer::public_transfer(bpc, ctx.sender());
-    id.delete();
 }
 
 // === Test Helpers ===
@@ -283,6 +297,8 @@ public fun collected_fees_value(market: &Marketplace): u64 { balance::value(&mar
 
 public fun bpo_listing_seller(listing: &BpoListing): address { listing.seller }
 public fun bpo_listing_price(listing: &BpoListing): u64 { listing.price }
+public fun bpo_listing_active(listing: &BpoListing): bool { listing.active }
 
 public fun bpc_listing_seller(listing: &BpcListing): address { listing.seller }
 public fun bpc_listing_price(listing: &BpcListing): u64 { listing.price }
+public fun bpc_listing_active(listing: &BpcListing): bool { listing.active }

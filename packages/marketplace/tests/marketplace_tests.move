@@ -30,8 +30,6 @@ fun make_test_recipe(ctx: &mut TxContext): recipe::Recipe {
 fun test_init_creates_shared_marketplace() {
     let mut scenario = test_scenario::begin(ADMIN);
     {
-        // init is called automatically when the module is deployed
-        // In test_scenario, we trigger it via the test_only init wrapper
         marketplace::test_init(scenario.ctx());
     };
 
@@ -69,6 +67,7 @@ fun test_list_bpo_wraps_object() {
         let listing = scenario.take_shared<BpoListing>();
         assert!(marketplace::bpo_listing_seller(&listing) == SELLER);
         assert!(marketplace::bpo_listing_price(&listing) == 5_000_000);
+        assert!(marketplace::bpo_listing_active(&listing) == true);
         test_scenario::return_shared(listing);
     };
     scenario.end();
@@ -112,13 +111,14 @@ fun test_buy_bpo_fee_split() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(10_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         // fee = 10_000_000 * 250 / 10000 = 250_000
-        // marketplace should have 250_000 in fees
         assert!(marketplace::collected_fees_value(&market) == 250_000);
+        assert!(marketplace::bpo_listing_active(&listing) == false);
         destroy(payment); // 0 left after exact payment
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
 
@@ -134,12 +134,6 @@ fun test_buy_bpo_fee_split() {
 
 #[test]
 fun test_buy_bpo_min_fee_1_mist() {
-    // price = MIN_PRICE = 1_000_000, fee_bps = 0 (we'd need to set it)
-    // Instead test with a tiny price that rounds to 0: price = 1_000_001, bps=0
-    // We can't set fee_bps=0 without admin. Let's just verify with real scenario:
-    // price = 1_000_000, fee = 1_000_000 * 250 / 10000 = 25_000 (not zero case)
-    // To hit the zero case: price < 10000/250 = 40 MIST, but MIN_PRICE=1_000_000
-    // So with default bps, min fee is always >= 1. Test via update_fee to 0.
     let mut scenario = test_scenario::begin(ADMIN);
     marketplace::test_init(scenario.ctx());
 
@@ -168,11 +162,12 @@ fun test_buy_bpo_min_fee_1_mist() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         assert!(marketplace::collected_fees_value(&market) == 1);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
 
@@ -203,13 +198,14 @@ fun test_buy_bpo_overpayment_returns_change() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         // overpay by 5_000_000
         let mut payment = coin::mint_for_testing<SUI>(15_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         // remaining should be 15_000_000 - 10_000_000 = 5_000_000
         assert!(coin::value(&payment) == 5_000_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -232,10 +228,12 @@ fun test_delist_bpo_by_seller() {
 
     scenario.next_tx(SELLER);
     {
-        let listing = scenario.take_shared<BpoListing>();
-        let bpo = marketplace::delist_bpo(listing, scenario.ctx());
+        let mut listing = scenario.take_shared<BpoListing>();
+        let bpo = marketplace::delist_bpo(&mut listing, scenario.ctx());
+        assert!(marketplace::bpo_listing_active(&listing) == false);
         // BPO returned successfully
         destroy(bpo);
+        test_scenario::return_shared(listing);
     };
     scenario.end();
 }
@@ -258,9 +256,10 @@ fun test_delist_bpo_by_non_seller() {
 
     scenario.next_tx(BUYER); // BUYER tries to delist
     {
-        let listing = scenario.take_shared<BpoListing>();
-        let bpo = marketplace::delist_bpo(listing, scenario.ctx());
+        let mut listing = scenario.take_shared<BpoListing>();
+        let bpo = marketplace::delist_bpo(&mut listing, scenario.ctx());
         destroy(bpo);
+        test_scenario::return_shared(listing);
     };
     scenario.end();
 }
@@ -295,12 +294,13 @@ fun test_list_buy_bpc() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpcListing>();
+        let mut listing = scenario.take_shared<BpcListing>();
         let mut payment = coin::mint_for_testing<SUI>(2_000_000, scenario.ctx());
-        marketplace::buy_bpc(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpc(&mut market, &mut listing, &mut payment, scenario.ctx());
         // fee = 2_000_000 * 250 / 10000 = 50_000
         assert!(marketplace::collected_fees_value(&market) == 50_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
 
@@ -344,12 +344,13 @@ fun test_update_fee() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(10_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         // fee = 10_000_000 * 500 / 10000 = 500_000
         assert!(marketplace::collected_fees_value(&market) == 500_000);
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
     scenario.end();
@@ -390,10 +391,11 @@ fun test_withdraw_fees() {
     scenario.next_tx(BUYER);
     {
         let mut market = scenario.take_shared<Marketplace>();
-        let listing = scenario.take_shared<BpoListing>();
+        let mut listing = scenario.take_shared<BpoListing>();
         let mut payment = coin::mint_for_testing<SUI>(10_000_000, scenario.ctx());
-        marketplace::buy_bpo(&mut market, listing, &mut payment, scenario.ctx());
+        marketplace::buy_bpo(&mut market, &mut listing, &mut payment, scenario.ctx());
         destroy(payment);
+        test_scenario::return_shared(listing);
         test_scenario::return_shared(market);
     };
 
