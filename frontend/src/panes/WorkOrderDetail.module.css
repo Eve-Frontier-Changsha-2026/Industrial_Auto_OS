@@ -1,0 +1,16 @@
+.container { display: flex; flex-direction: column; gap: 10px; }
+.selector { display: flex; gap: 6px; align-items: center; }
+.select { flex: 1; padding: 4px 8px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.detail { display: flex; flex-direction: column; gap: 6px; }
+.row { display: flex; gap: 8px; font-size: 11px; }
+.label { color: var(--text-muted); min-width: 100px; font-size: 10px; text-transform: uppercase; }
+.value { color: var(--text-secondary); word-break: break-all; }
+.actions { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; border-top: 1px solid var(--border); }
+.actionsTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.actionRow { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.btn { padding: 4px 10px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btnDanger { border-color: var(--status-error); color: var(--status-error); }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.input { width: 80px; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

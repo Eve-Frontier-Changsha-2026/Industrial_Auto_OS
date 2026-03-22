@@ -1,0 +1,11 @@
+.container { display: flex; flex-direction: column; gap: 12px; }
+.section { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; padding: 10px; }
+.sectionTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+.form { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.input { width: 80px; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.select { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.btn { padding: 4px 10px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.label { font-size: 10px; color: var(--text-muted); }
+.noWallet { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

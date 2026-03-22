@@ -1,0 +1,4 @@
+.grid { display: flex; gap: 8px; flex-wrap: wrap; }
+.card { flex: 1; min-width: 120px; padding: 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; text-align: center; }
+.value { font-size: 24px; font-weight: 700; color: var(--accent); }
+.label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 4px; }

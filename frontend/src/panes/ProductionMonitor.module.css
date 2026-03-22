@@ -1,0 +1,17 @@
+.container { display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; padding: 10px; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.stats { display: flex; gap: 16px; font-size: 10px; color: var(--text-muted); margin-bottom: 8px; }
+.stat span { color: var(--text-secondary); }
+.progressBar { height: 4px; background: var(--bg-panel); border-radius: 1px; overflow: hidden; margin-bottom: 8px; }
+.progressFill { height: 100%; background: var(--progress-fill); transition: width 1s linear; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn { padding: 4px 10px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.input { width: 80px; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.select { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.row { display: flex; align-items: center; gap: 6px; }
+.countdown { font-size: 11px; color: var(--status-warn); }
+.noLines { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

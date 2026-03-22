@@ -1,0 +1,6 @@
+.table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.table th { text-align: left; padding: 4px 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.table td { padding: 4px 8px; color: var(--text-secondary); border-bottom: 1px solid var(--bg-header); }
+.table tr:hover td { background: var(--bg-header); }
+.name { color: var(--text-primary); font-weight: 600; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

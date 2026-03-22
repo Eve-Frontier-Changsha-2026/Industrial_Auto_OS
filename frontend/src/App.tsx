@@ -3,6 +3,8 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { TopBar } from "./components/TopBar";
 import { PaneChrome } from "./components/PaneChrome";
+import { ToastContainer } from "./components/Toast";
+import { ToastContext, useToastState } from "./hooks/useToast";
 import { PANE_MAP } from "./config/paneRegistry";
 import { useLayout } from "./hooks/useLayout";
 import { usePaneManager } from "./hooks/usePaneManager";
@@ -11,10 +13,12 @@ import styles from "./App.module.css";
 export default function App() {
   const { layout, onLayoutChange } = useLayout();
   const { openPanes, minimized, maximized, open, close, minimize, maximize } = usePaneManager();
+  const toastState = useToastState();
 
   const visibleLayout = layout.filter((l) => openPanes.has(l.i));
 
   return (
+    <ToastContext.Provider value={toastState}>
     <div className={styles.app}>
       <TopBar openPanes={openPanes} onAddPane={open} />
       <div className={styles.grid}>
@@ -70,6 +74,8 @@ export default function App() {
           );
         })()}
       </div>
+      <ToastContainer />
     </div>
+    </ToastContext.Provider>
   );
 }

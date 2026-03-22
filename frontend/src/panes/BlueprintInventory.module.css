@@ -1,0 +1,10 @@
+.container { display: flex; flex-direction: column; gap: 12px; }
+.section { }
+.sectionTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+.table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.table th { text-align: left; padding: 3px 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.table td { padding: 3px 6px; color: var(--text-secondary); }
+.table tr:hover td { background: var(--bg-header); }
+.effBar { display: inline-block; height: 6px; background: var(--accent); border-radius: 1px; vertical-align: middle; }
+.effTrack { display: inline-block; width: 50px; height: 6px; background: var(--bg-deep); border-radius: 1px; margin-right: 4px; overflow: hidden; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

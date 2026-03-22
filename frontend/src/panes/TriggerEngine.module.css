@@ -1,0 +1,21 @@
+.container { display: flex; flex-direction: column; gap: 12px; }
+.section { }
+.sectionTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+.rules { display: flex; flex-direction: column; gap: 4px; }
+.rule { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.ruleInfo { display: flex; flex-direction: column; gap: 1px; font-size: 11px; }
+.ruleCondition { color: var(--text-primary); }
+.ruleDetail { font-size: 9px; color: var(--text-muted); }
+.ruleActions { display: flex; gap: 4px; align-items: center; }
+.toggleBtn { padding: 3px 8px; font-size: 9px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.toggleBtn:hover { background: var(--border); }
+.form { display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.formRow { display: flex; gap: 6px; align-items: center; }
+.label { font-size: 10px; color: var(--text-muted); min-width: 90px; }
+.input { flex: 1; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.select { flex: 1; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.checkbox { accent-color: var(--accent); }
+.btn { padding: 4px 10px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--accent); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

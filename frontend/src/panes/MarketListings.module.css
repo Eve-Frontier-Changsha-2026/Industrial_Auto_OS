@@ -1,0 +1,19 @@
+.container { display: flex; flex-direction: column; gap: 8px; }
+.tabs { display: flex; gap: 2px; }
+.tab { padding: 3px 8px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; border-radius: 2px; }
+.tab:hover { color: var(--text-secondary); }
+.tabActive { color: var(--accent); border-color: var(--accent); }
+.listings { display: flex; flex-direction: column; gap: 4px; }
+.card { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.cardInfo { display: flex; flex-direction: column; gap: 2px; }
+.price { font-size: 13px; font-weight: 600; color: var(--accent); }
+.seller { font-size: 10px; color: var(--text-muted); }
+.cardActions { display: flex; gap: 4px; }
+.btn { padding: 4px 10px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btnDanger { border-color: var(--status-error); color: var(--status-error); }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.listForm { display: flex; gap: 6px; align-items: center; padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; flex-wrap: wrap; }
+.select { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.input { width: 80px; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

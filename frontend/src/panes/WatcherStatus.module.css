@@ -1,0 +1,11 @@
+.container { display: flex; flex-direction: column; gap: 10px; }
+.health { display: flex; gap: 16px; padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; font-size: 11px; }
+.healthItem { display: flex; flex-direction: column; gap: 2px; }
+.healthLabel { font-size: 9px; text-transform: uppercase; color: var(--text-muted); }
+.healthValue { color: var(--text-secondary); }
+.rules { display: flex; flex-direction: column; gap: 2px; }
+.rule { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.ruleInfo { display: flex; flex-direction: column; gap: 1px; }
+.ruleName { font-size: 11px; color: var(--text-primary); }
+.ruleDesc { font-size: 9px; color: var(--text-muted); }
+.offline { color: var(--status-error); font-size: 11px; padding: 8px; text-align: center; background: var(--bg-deep); border: 1px solid var(--status-error); border-radius: 2px; }

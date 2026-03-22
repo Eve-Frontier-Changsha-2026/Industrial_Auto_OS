@@ -1,0 +1,17 @@
+.container { display: flex; flex-direction: column; gap: 10px; }
+.table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.table th { text-align: left; padding: 4px 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.table td { padding: 4px 6px; color: var(--text-secondary); border-bottom: 1px solid var(--bg-header); }
+.table tr:hover td { background: var(--bg-header); }
+.btn { padding: 3px 8px; font-size: 9px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btnDanger { border-color: var(--status-error); color: var(--status-error); }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.createForm { display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.formTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); cursor: pointer; }
+.formRow { display: flex; gap: 6px; align-items: center; }
+.label { font-size: 10px; color: var(--text-muted); min-width: 70px; }
+.input { flex: 1; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.select { flex: 1; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }
+.countdown { color: var(--status-warn); font-size: 10px; }
