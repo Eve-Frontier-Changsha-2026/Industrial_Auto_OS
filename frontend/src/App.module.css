@@ -1,0 +1,7 @@
+.app { display: flex; flex-direction: column; height: 100vh; }
+.grid { flex: 1; overflow-y: auto; padding: 4px; }
+.gridInner { min-height: 100%; }
+.overlay {
+  position: fixed; inset: var(--topbar-height) 0 0 0;
+  z-index: 50; background: var(--bg-deep); padding: 4px;
+}

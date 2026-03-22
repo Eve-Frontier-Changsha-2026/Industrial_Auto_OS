@@ -1,0 +1,17 @@
+:root {
+  --bg-deep: #0c0a04;
+  --bg-panel: #110e04;
+  --bg-header: #1a1408;
+  --border: #3a2d0a;
+  --text-primary: #e8d088;
+  --text-secondary: #b89a40;
+  --text-muted: #8a7530;
+  --accent: #c9a84c;
+  --status-ok: #4caf50;
+  --status-warn: #e8a82d;
+  --status-error: #c94040;
+  --status-info: #5b8fb9;
+  --progress-fill: linear-gradient(90deg, #8a6b10, #c9a84c);
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --topbar-height: 36px;
+}

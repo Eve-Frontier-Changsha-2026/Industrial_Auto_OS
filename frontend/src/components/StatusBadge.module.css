@@ -1,0 +1,15 @@
+.badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.ok    { color: var(--status-ok);   border-color: var(--status-ok);   background: rgba(76,175,80,0.1); }
+.warn  { color: var(--status-warn); border-color: var(--status-warn); background: rgba(232,168,45,0.1); }
+.error { color: var(--status-error);border-color: var(--status-error);background: rgba(201,64,64,0.1); }
+.info  { color: var(--status-info); border-color: var(--status-info); background: rgba(91,143,185,0.1); }
+.muted { color: var(--text-muted);  border-color: var(--border);      background: transparent; }

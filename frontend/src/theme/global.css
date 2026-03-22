@@ -1,0 +1,45 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+input, select, textarea, button {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 8px;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+}
+
+button {
+  cursor: pointer;
+  background: var(--bg-header);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  transition: background 0.15s, border-color 0.15s;
+}
+button:hover { background: var(--border); border-color: var(--accent); color: var(--text-primary); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
