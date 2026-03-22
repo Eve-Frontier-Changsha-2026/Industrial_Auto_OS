@@ -1,3 +1,4 @@
+import express from "express";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { loadConfig } from "./config.js";
 import { createDb } from "./db/sqlite.js";
@@ -10,6 +11,7 @@ import { DeadlineScheduler } from "./poller/deadline-scheduler.js";
 import { FleetListener } from "./poller/fleet-listener.js";
 import { RuleRegistry } from "./rules/registry.js";
 import { WatcherEngine } from "./engine.js";
+import { createApiRouter, updateLastPoll } from "./api/server.js";
 
 // Rule handlers
 import { ProductionCompleter } from "./rules/production-completer.js";
@@ -87,6 +89,18 @@ async function main() {
   const engine = new WatcherEngine(config, db, registry);
   engine.setTxExecutor(txExecutor);
 
+  // ─── REST API ────────────────────────────────
+  const apiApp = express();
+  apiApp.use((_req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    next();
+  });
+  apiApp.use("/", createApiRouter(db, registry));
+  const apiPort = config.api?.port ?? 3001;
+  apiApp.listen(apiPort, () => {
+    console.log(`API server on http://localhost:${apiPort}`);
+  });
+
   // ─── Fleet Listener ──────────────────────────
   const fleetConfig = rules.fleet_damage as any;
   const fleetListener = new FleetListener({
@@ -113,6 +127,7 @@ async function main() {
 
   while (running) {
     try {
+      updateLastPoll();
       // 1. Poll events
       const events = await eventPoller.poll();
       deadlineScheduler.processEvents(events);

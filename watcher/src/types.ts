@@ -59,6 +59,7 @@ export interface WatcherConfig {
     min_coin_balance: number;
     auto_replenish: boolean;
   };
+  api?: { port?: number };
   rules: Record<string, RuleConfig>;
 }
 
