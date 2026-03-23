@@ -261,6 +261,7 @@ fun test_admin_revoke_blocks_permit() {
         factory_access::admin_revoke_pass(
             &mut access_registry,
             pass_id,
+            @0xAA,
             &line,
             scenario.ctx(),
         );

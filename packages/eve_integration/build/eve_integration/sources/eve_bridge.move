@@ -83,8 +83,10 @@ public fun add_global_mapping(
 ) {
     let eve_key = EveToIndustrial { eve_type_id };
     assert!(!dynamic_field::exists_(&registry.id, eve_key), E_MAPPING_ALREADY_EXISTS);
+    let rev_key = IndustrialToEve { material_id };
+    assert!(!dynamic_field::exists_(&registry.id, rev_key), E_MAPPING_ALREADY_EXISTS);
     dynamic_field::add(&mut registry.id, eve_key, material_id);
-    dynamic_field::add(&mut registry.id, IndustrialToEve { material_id }, eve_type_id);
+    dynamic_field::add(&mut registry.id, rev_key, eve_type_id);
     event::emit(GlobalMappingAddedEvent { eve_type_id, material_id });
 }
 

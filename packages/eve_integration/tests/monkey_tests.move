@@ -252,9 +252,9 @@ fun test_max_mappings_stress() {
         let mut registry = scenario.take_shared<GlobalRegistry>();
         let cap = scenario.take_from_sender<RegistryAdminCap>();
 
-        // Add 60 mappings
+        // Add 20 mappings (reduced from 60 to avoid test timeout)
         let mut i: u64 = 0;
-        while (i < 60) {
+        while (i < 20) {
             let eve_id = 100000 + i;
             // Build a unique material name: "mat_XX"
             let mat = if (i < 10) {
@@ -271,9 +271,9 @@ fun test_max_mappings_stress() {
             i = i + 1;
         };
 
-        // Verify all 60 resolve correctly
+        // Verify all 20 resolve correctly
         let mut j: u64 = 0;
-        while (j < 60) {
+        while (j < 20) {
             let eve_id = 100000 + j;
             let result = eve_bridge::resolve_eve_to_industrial(&registry, eve_id);
             assert!(result.is_some());

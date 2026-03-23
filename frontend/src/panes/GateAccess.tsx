@@ -73,8 +73,8 @@ export function GateAccess() {
     });
   }
 
-  function handleAdminRevoke(passId: string, factoryId: string) {
-    const tx = buildAdminRevokePass(pkg, SHARED_OBJECTS.access_registry, passId, factoryId);
+  function handleAdminRevoke(passId: string, holder: string, factoryId: string) {
+    const tx = buildAdminRevokePass(pkg, SHARED_OBJECTS.access_registry, passId, holder, factoryId);
     signAndExecute({ transaction: tx }, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["access-passes"] });
@@ -151,7 +151,7 @@ export function GateAccess() {
                     )}
                     <button
                       className={`${styles.btn} ${styles.btnDanger}`}
-                      onClick={() => handleAdminRevoke(p.id, p.factoryId)}
+                      onClick={() => handleAdminRevoke(p.id, p.holder, p.factoryId)}
                       disabled={!account}
                     >
                       Admin Revoke

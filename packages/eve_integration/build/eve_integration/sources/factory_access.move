@@ -226,13 +226,15 @@ public fun revoke_expired(
 public fun admin_revoke_pass(
     access_registry: &mut AccessRegistry,
     pass_id: ID,
+    holder: address,
     line: &ProductionLine,
     ctx: &TxContext,
 ) {
     assert!(ctx.sender() == production_line::owner(line), E_NOT_AUTHORIZED);
     access_registry.revoked_passes.add(pass_id, true);
+    unregister_pass(access_registry, object::id(line), holder);
     event::emit(AccessRevokedEvent {
-        pass_id, factory_id: object::id(line), holder: ctx.sender(), reason: string::utf8(b"admin_revoke"),
+        pass_id, factory_id: object::id(line), holder, reason: string::utf8(b"admin_revoke"),
     });
 }
 
