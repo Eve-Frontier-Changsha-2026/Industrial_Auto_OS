@@ -1,6 +1,7 @@
 [package]
 name = "industrial_core"
 edition = "2024.beta"
+published-at = "0xe5fa49b0e8cc82b12bf1e26627b9738e57e5431c9d8ccae1c5d8584fb4e5e0a8"
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "072a2111619715c3348d1b83c0526c3bcfa5cdd1" }

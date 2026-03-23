@@ -7,6 +7,8 @@ use sui::sui::SUI;
 use sui::test_scenario;
 use industrial_core::recipe;
 use industrial_core::blueprint;
+use industrial_core::production_line;
+use industrial_core::mock_fuel;
 use marketplace::lease::{Self, LeaseAgreement};
 use std::unit_test::destroy;
 
@@ -174,6 +176,186 @@ fun test_forfeit_lease_before_expiry() {
         clock::destroy_for_testing(clk);
         test_scenario::return_shared(agreement);
     };
+    scenario.end();
+}
+
+// ─── Start Production With Lease ───
+
+#[test]
+fun test_start_production_with_lease_happy_path() {
+    let mut scenario = test_scenario::begin(LESSEE);
+    let r;
+    {
+        // LESSEE creates recipe and production line (LESSEE is the line owner)
+        r = make_test_recipe(scenario.ctx());
+        production_line::create_production_line(
+            b"Leased Line".to_string(),
+            object::id(&r),
+            scenario.ctx(),
+        );
+    };
+
+    // LESSOR creates BPO and lease
+    scenario.next_tx(LESSOR);
+    {
+        let bpo = blueprint::mint_bpo(&r, 10, 10, 10, scenario.ctx());
+        let deposit = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        // expiry = 999_999_999 ms (far future)
+        lease::create_lease(bpo, LESSEE, deposit, 999_999_999, 100_000, scenario.ctx());
+    };
+
+    // LESSEE deposits materials + fuel, then starts production using lease
+    scenario.next_tx(LESSEE);
+    {
+        let mut line = scenario.take_shared<production_line::ProductionLine>();
+        production_line::deposit_materials(&mut line, &r, 101, 200, scenario.ctx());
+        mock_fuel::mock_deposit_fuel(&mut line, 500);
+        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut clk = clock::create_for_testing(scenario.ctx());
+        clock::set_for_testing(&mut clk, 100);
+
+        lease::start_production_with_lease(&agreement, &mut line, &r, &clk, scenario.ctx());
+
+        // Line should be running
+        assert!(production_line::status(&line) == 1); // STATUS_RUNNING
+
+        clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
+        test_scenario::return_shared(line);
+    };
+    destroy(r);
+    scenario.end();
+}
+
+#[test]
+#[expected_failure(abort_code = 300)] // E_NOT_LESSEE
+fun test_start_production_with_lease_by_non_lessee() {
+    let mut scenario = test_scenario::begin(STRANGER);
+    let r;
+    {
+        r = make_test_recipe(scenario.ctx());
+        production_line::create_production_line(
+            b"Stranger Line".to_string(),
+            object::id(&r),
+            scenario.ctx(),
+        );
+    };
+
+    scenario.next_tx(LESSOR);
+    {
+        let bpo = blueprint::mint_bpo(&r, 10, 5, 5, scenario.ctx());
+        let deposit = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        lease::create_lease(bpo, LESSEE, deposit, 999_999_999, 100_000, scenario.ctx());
+    };
+
+    // STRANGER (line owner but not lessee) tries to produce
+    scenario.next_tx(STRANGER);
+    {
+        let mut line = scenario.take_shared<production_line::ProductionLine>();
+        production_line::deposit_materials(&mut line, &r, 101, 200, scenario.ctx());
+        mock_fuel::mock_deposit_fuel(&mut line, 500);
+        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut clk = clock::create_for_testing(scenario.ctx());
+        clock::set_for_testing(&mut clk, 100);
+
+        lease::start_production_with_lease(&agreement, &mut line, &r, &clk, scenario.ctx());
+
+        clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
+        test_scenario::return_shared(line);
+    };
+    destroy(r);
+    scenario.end();
+}
+
+#[test]
+#[expected_failure(abort_code = 304)] // E_LEASE_EXPIRED
+fun test_start_production_with_expired_lease() {
+    let mut scenario = test_scenario::begin(LESSEE);
+    let r;
+    {
+        r = make_test_recipe(scenario.ctx());
+        production_line::create_production_line(
+            b"Expired Line".to_string(),
+            object::id(&r),
+            scenario.ctx(),
+        );
+    };
+
+    scenario.next_tx(LESSOR);
+    {
+        let bpo = blueprint::mint_bpo(&r, 10, 5, 5, scenario.ctx());
+        let deposit = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        // expiry = 1000 ms
+        lease::create_lease(bpo, LESSEE, deposit, 1000, 100_000, scenario.ctx());
+    };
+
+    scenario.next_tx(LESSEE);
+    {
+        let mut line = scenario.take_shared<production_line::ProductionLine>();
+        production_line::deposit_materials(&mut line, &r, 101, 200, scenario.ctx());
+        mock_fuel::mock_deposit_fuel(&mut line, 500);
+        let agreement = scenario.take_shared<LeaseAgreement>();
+        // Clock past expiry
+        let mut clk = clock::create_for_testing(scenario.ctx());
+        clock::set_for_testing(&mut clk, 2000);
+
+        lease::start_production_with_lease(&agreement, &mut line, &r, &clk, scenario.ctx());
+
+        clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
+        test_scenario::return_shared(line);
+    };
+    destroy(r);
+    scenario.end();
+}
+
+#[test]
+#[expected_failure(abort_code = 303)] // E_LEASE_INACTIVE
+fun test_start_production_with_returned_lease() {
+    let mut scenario = test_scenario::begin(LESSEE);
+    let r;
+    {
+        r = make_test_recipe(scenario.ctx());
+        production_line::create_production_line(
+            b"Returned Line".to_string(),
+            object::id(&r),
+            scenario.ctx(),
+        );
+    };
+
+    scenario.next_tx(LESSOR);
+    {
+        let bpo = blueprint::mint_bpo(&r, 10, 5, 5, scenario.ctx());
+        let deposit = coin::mint_for_testing<SUI>(1_000_000, scenario.ctx());
+        lease::create_lease(bpo, LESSEE, deposit, 999_999_999, 100_000, scenario.ctx());
+    };
+
+    // Lessee returns the lease first
+    scenario.next_tx(LESSEE);
+    {
+        let mut agreement = scenario.take_shared<LeaseAgreement>();
+        lease::return_lease(&mut agreement, scenario.ctx());
+        test_scenario::return_shared(agreement);
+    };
+
+    // Then tries to use it for production
+    scenario.next_tx(LESSEE);
+    {
+        let mut line = scenario.take_shared<production_line::ProductionLine>();
+        production_line::deposit_materials(&mut line, &r, 101, 200, scenario.ctx());
+        mock_fuel::mock_deposit_fuel(&mut line, 500);
+        let agreement = scenario.take_shared<LeaseAgreement>();
+        let mut clk = clock::create_for_testing(scenario.ctx());
+        clock::set_for_testing(&mut clk, 100);
+
+        lease::start_production_with_lease(&agreement, &mut line, &r, &clk, scenario.ctx());
+
+        clock::destroy_for_testing(clk);
+        test_scenario::return_shared(agreement);
+        test_scenario::return_shared(line);
+    };
+    destroy(r);
     scenario.end();
 }
 

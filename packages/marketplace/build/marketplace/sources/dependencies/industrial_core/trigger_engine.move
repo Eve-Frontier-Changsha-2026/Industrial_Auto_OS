@@ -15,8 +15,9 @@ const E_TRIGGER_LINE_MISMATCH: u64 = 19;
 
 // === Condition Types ===
 const CONDITION_INVENTORY_BELOW: u8 = 0;
-// const CONDITION_EXTERNAL_EVENT: u8 = 1;  // future
-// const CONDITION_SCHEDULE: u8 = 2;        // future
+const CONDITION_INVENTORY_ABOVE: u8 = 1;
+// const CONDITION_EXTERNAL_EVENT: u8 = 2;  // future
+// const CONDITION_SCHEDULE: u8 = 3;        // future
 
 // === Structs ===
 public struct TriggerRule has key, store {
@@ -94,6 +95,10 @@ public fun evaluate_trigger(
         let current_qty = production_line::get_output_buffer_qty(line, rule.target_item_type_id);
         return current_qty < rule.threshold
     };
+    if (rule.condition_type == CONDITION_INVENTORY_ABOVE) {
+        let current_qty = production_line::get_output_buffer_qty(line, rule.target_item_type_id);
+        return current_qty > rule.threshold
+    };
 
     false
 }
@@ -141,6 +146,10 @@ fun evaluate_condition(rule: &TriggerRule, line: &ProductionLine): bool {
     if (rule.condition_type == CONDITION_INVENTORY_BELOW) {
         let current_qty = production_line::get_output_buffer_qty(line, rule.target_item_type_id);
         return current_qty < rule.threshold
+    };
+    if (rule.condition_type == CONDITION_INVENTORY_ABOVE) {
+        let current_qty = production_line::get_output_buffer_qty(line, rule.target_item_type_id);
+        return current_qty > rule.threshold
     };
     false
 }

@@ -1,0 +1,10 @@
+.container { display: flex; flex-direction: column; gap: 10px; }
+.table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.table th { text-align: left; padding: 4px 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.table td { padding: 4px 6px; color: var(--text-secondary); border-bottom: 1px solid var(--bg-header); }
+.table tr:hover td { background: var(--bg-header); }
+.section { padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.sectionTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+.info { color: var(--text-secondary); font-size: 10px; line-height: 1.6; }
+.muted { color: var(--text-muted); font-size: 10px; font-style: italic; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }

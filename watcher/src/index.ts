@@ -25,6 +25,11 @@ import { ExpiredCleaner } from "./rules/expired-cleaner.js";
 import { DeliveryHandler } from "./rules/delivery-handler.js";
 import { LeaseForfeiter } from "./rules/lease-forfeiter.js";
 import { FleetDamageHandler } from "./rules/fleet-damage.js";
+import { AutoProduceFromSSU } from "./rules/auto-produce-from-ssu.js";
+import { AutoCollectToSSU } from "./rules/auto-collect-to-ssu.js";
+import { AutoGrantAccess } from "./rules/auto-grant-access.js";
+import { AutoRevokeAccess } from "./rules/auto-revoke-access.js";
+import { SyncRegistry } from "./rules/sync-registry.js";
 
 async function main() {
   const configPath = process.argv[2] ?? "config.yaml";
@@ -61,10 +66,21 @@ async function main() {
   const { rules, package_ids: pkgs, watch } = config;
   const boardId = watch.work_order_board_id;
 
+  const eveConfig = (config as any).eve_integration as import("./types.js").EveIntegrationConfig | undefined;
+
   const ruleMap: Record<string, () => import("./rules/interface.js").RuleHandler> = {
     production_completer: () => new ProductionCompleter(pkgs.industrial_core),
     output_withdrawer: () => new OutputWithdrawer(pkgs.industrial_core),
-    trigger_evaluator: () => new TriggerEvaluator(pkgs.industrial_core, []),
+    trigger_evaluator: () => {
+      const rawRules = (rules.trigger_evaluator as any)?.trigger_rules ?? [];
+      const triggerRules = rawRules.map((r: any) => ({
+        ruleId: r.rule_id,
+        productionLineId: r.production_line_id,
+        recipeId: r.recipe_id,
+        blueprintId: r.blueprint_id,
+      }));
+      return new TriggerEvaluator(pkgs.industrial_core, triggerRules);
+    },
     auto_restock: () => new AutoRestock(pkgs.industrial_core),
     order_acceptor: () => new OrderAcceptor(pkgs.work_order),
     order_completer: () => new OrderCompleter(pkgs.work_order, boardId),
@@ -73,6 +89,11 @@ async function main() {
     delivery_handler: () => new DeliveryHandler(pkgs.work_order, client),
     lease_forfeiter: () => new LeaseForfeiter(pkgs.marketplace),
     fleet_damage: () => new FleetDamageHandler(pkgs.work_order, boardId),
+    auto_produce_from_ssu: () => new AutoProduceFromSSU(eveConfig?.eve_pkg_id ?? ""),
+    auto_collect_to_ssu: () => new AutoCollectToSSU(eveConfig?.eve_pkg_id ?? ""),
+    auto_grant_access: () => new AutoGrantAccess(eveConfig?.eve_pkg_id ?? ""),
+    auto_revoke_access: () => new AutoRevokeAccess(eveConfig?.eve_pkg_id ?? ""),
+    sync_registry: () => new SyncRegistry(eveConfig?.eve_pkg_id ?? ""),
   };
 
   for (const [name, factory] of Object.entries(ruleMap)) {

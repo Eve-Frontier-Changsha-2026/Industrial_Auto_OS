@@ -1,0 +1,265 @@
+<h2>EVE Frontier HUD — Visual Style Direction</h2>
+<p class="subtitle">Which color scheme and HUD chrome feels right for Industrial Auto OS?</p>
+
+<div class="cards">
+  <!-- Option A: Classic EVE -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:320px;background:#0a0e17;border:1px solid #1a3a5c;overflow:hidden;position:relative;">
+      <!-- Top bar -->
+      <div style="background:linear-gradient(180deg,#0d1a2a,#0a1020);border-bottom:1px solid #1a3a5c;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#5b8fb9;font:bold 11px monospace;text-transform:uppercase;letter-spacing:2px;">⬡ Industrial Auto OS</span>
+        <span style="color:#3a7ca5;font:10px monospace;">CAPSULEER: 0x7f2a...e91c</span>
+      </div>
+      <!-- Grid of panels -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;">
+        <!-- Production panel -->
+        <div style="background:#0b1221;border:1px solid #1a3a5c;border-radius:2px;">
+          <div style="background:#0d1a2a;padding:4px 8px;border-bottom:1px solid #1a3a5c;display:flex;justify-content:space-between;">
+            <span style="color:#5b8fb9;font:bold 9px monospace;">PRODUCTION LINE α</span>
+            <span style="color:#2d6a4f;font:9px monospace;">● RUNNING</span>
+          </div>
+          <div style="padding:8px;font:9px monospace;color:#7ba3c4;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#4a7a9b;">Recipe:</span><span style="color:#8bc4e8;">Tritanium Plate</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#4a7a9b;">ETA:</span><span style="color:#e8c44a;">00:14:32</span>
+            </div>
+            <div style="background:#060d18;border:1px solid #1a3a5c;height:8px;border-radius:1px;overflow:hidden;margin-top:4px;">
+              <div style="background:linear-gradient(90deg,#1a5276,#2d8bc9);height:100%;width:72%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="color:#4a7a9b;">Jobs:</span><span>142</span>
+            </div>
+          </div>
+        </div>
+        <!-- Work Orders panel -->
+        <div style="background:#0b1221;border:1px solid #1a3a5c;border-radius:2px;">
+          <div style="background:#0d1a2a;padding:4px 8px;border-bottom:1px solid #1a3a5c;">
+            <span style="color:#5b8fb9;font:bold 9px monospace;">WORK ORDERS</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;">
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #0d1a2a;">
+              <span style="color:#e8c44a;">WO-0042</span><span style="color:#2d6a4f;">ACCEPTED</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #0d1a2a;">
+              <span style="color:#8bc4e8;">WO-0043</span><span style="color:#5b8fb9;">OPEN</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #0d1a2a;">
+              <span style="color:#8bc4e8;">WO-0044</span><span style="color:#c97d2d;">DELIVERING</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;">
+              <span style="color:#8bc4e8;">WO-0045</span><span style="color:#2d6a4f;">COMPLETED</span>
+            </div>
+          </div>
+        </div>
+        <!-- Trigger Engine panel -->
+        <div style="background:#0b1221;border:1px solid #1a3a5c;border-radius:2px;">
+          <div style="background:#0d1a2a;padding:4px 8px;border-bottom:1px solid #1a3a5c;">
+            <span style="color:#5b8fb9;font:bold 9px monospace;">TRIGGER ENGINE</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;color:#7ba3c4;">
+            <div style="margin-bottom:3px;"><span style="color:#c94040;">▲ LOW STOCK</span> <span style="color:#4a7a9b;">Tritanium &lt; 10</span></div>
+            <div style="margin-bottom:3px;"><span style="color:#2d6a4f;">● COOLDOWN</span> <span style="color:#4a7a9b;">Auto-restock 04:21</span></div>
+            <div><span style="color:#e8c44a;">◆ PENDING</span> <span style="color:#4a7a9b;">Fleet damage eval</span></div>
+          </div>
+        </div>
+        <!-- Gas Pool panel -->
+        <div style="background:#0b1221;border:1px solid #1a3a5c;border-radius:2px;">
+          <div style="background:#0d1a2a;padding:4px 8px;border-bottom:1px solid #1a3a5c;">
+            <span style="color:#5b8fb9;font:bold 9px monospace;">GAS POOL</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;color:#7ba3c4;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#4a7a9b;">Coins:</span><span>18/20</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#4a7a9b;">Balance:</span><span style="color:#2d6a4f;">2.41 SUI</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:#4a7a9b;">TX/hr:</span><span>34</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Classic EVE Blue</h3>
+      <p>Deep navy (#0a0e17) + steel blue borders (#1a3a5c) + ice blue text. Traditional EVE Online feel. Cold, military, functional.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Amber Industrial -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:320px;background:#0c0a04;border:1px solid #3a2d0a;overflow:hidden;position:relative;">
+      <!-- Top bar -->
+      <div style="background:linear-gradient(180deg,#1a1408,#0f0c04);border-bottom:1px solid #3a2d0a;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#c9a84c;font:bold 11px monospace;text-transform:uppercase;letter-spacing:2px;">⬡ Industrial Auto OS</span>
+        <span style="color:#8a7530;font:10px monospace;">CAPSULEER: 0x7f2a...e91c</span>
+      </div>
+      <!-- Grid of panels -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;">
+        <!-- Production panel -->
+        <div style="background:#110e04;border:1px solid #3a2d0a;border-radius:2px;">
+          <div style="background:#1a1408;padding:4px 8px;border-bottom:1px solid #3a2d0a;display:flex;justify-content:space-between;">
+            <span style="color:#c9a84c;font:bold 9px monospace;">PRODUCTION LINE α</span>
+            <span style="color:#4caf50;font:9px monospace;">● RUNNING</span>
+          </div>
+          <div style="padding:8px;font:9px monospace;color:#b89a40;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#8a7530;">Recipe:</span><span style="color:#e8d088;">Tritanium Plate</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#8a7530;">ETA:</span><span style="color:#e8d088;">00:14:32</span>
+            </div>
+            <div style="background:#0a0804;border:1px solid #3a2d0a;height:8px;border-radius:1px;overflow:hidden;margin-top:4px;">
+              <div style="background:linear-gradient(90deg,#8a6b10,#c9a84c);height:100%;width:72%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="color:#8a7530;">Jobs:</span><span>142</span>
+            </div>
+          </div>
+        </div>
+        <!-- Work Orders panel -->
+        <div style="background:#110e04;border:1px solid #3a2d0a;border-radius:2px;">
+          <div style="background:#1a1408;padding:4px 8px;border-bottom:1px solid #3a2d0a;">
+            <span style="color:#c9a84c;font:bold 9px monospace;">WORK ORDERS</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;">
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #1a1408;">
+              <span style="color:#e8d088;">WO-0042</span><span style="color:#4caf50;">ACCEPTED</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #1a1408;">
+              <span style="color:#e8d088;">WO-0043</span><span style="color:#c9a84c;">OPEN</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #1a1408;">
+              <span style="color:#e8d088;">WO-0044</span><span style="color:#e88a2d;">DELIVERING</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;">
+              <span style="color:#e8d088;">WO-0045</span><span style="color:#4caf50;">COMPLETED</span>
+            </div>
+          </div>
+        </div>
+        <!-- Trigger Engine panel -->
+        <div style="background:#110e04;border:1px solid #3a2d0a;border-radius:2px;">
+          <div style="background:#1a1408;padding:4px 8px;border-bottom:1px solid #3a2d0a;">
+            <span style="color:#c9a84c;font:bold 9px monospace;">TRIGGER ENGINE</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;color:#b89a40;">
+            <div style="margin-bottom:3px;"><span style="color:#c94040;">▲ LOW STOCK</span> <span style="color:#8a7530;">Tritanium &lt; 10</span></div>
+            <div style="margin-bottom:3px;"><span style="color:#4caf50;">● COOLDOWN</span> <span style="color:#8a7530;">Auto-restock 04:21</span></div>
+            <div><span style="color:#e8a82d;">◆ PENDING</span> <span style="color:#8a7530;">Fleet damage eval</span></div>
+          </div>
+        </div>
+        <!-- Gas Pool panel -->
+        <div style="background:#110e04;border:1px solid #3a2d0a;border-radius:2px;">
+          <div style="background:#1a1408;padding:4px 8px;border-bottom:1px solid #3a2d0a;">
+            <span style="color:#c9a84c;font:bold 9px monospace;">GAS POOL</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;color:#b89a40;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#8a7530;">Coins:</span><span>18/20</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#8a7530;">Balance:</span><span style="color:#4caf50;">2.41 SUI</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:#8a7530;">TX/hr:</span><span>34</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Amber Industrial</h3>
+      <p>Near-black (#0c0a04) + amber/gold borders (#3a2d0a) + warm gold text. EVE Frontier's industrial faction feel. Warmer, grittier, factory vibe.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Cyan Neon -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:320px;background:#040d0f;border:1px solid #0a3a3c;overflow:hidden;position:relative;">
+      <!-- Top bar -->
+      <div style="background:linear-gradient(180deg,#081a1c,#040f10);border-bottom:1px solid #0a3a3c;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#00e5cc;font:bold 11px monospace;text-transform:uppercase;letter-spacing:2px;">⬡ Industrial Auto OS</span>
+        <span style="color:#0a8a7c;font:10px monospace;">CAPSULEER: 0x7f2a...e91c</span>
+      </div>
+      <!-- Grid of panels -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;">
+        <!-- Production panel -->
+        <div style="background:#051214;border:1px solid #0a3a3c;border-radius:2px;">
+          <div style="background:#081a1c;padding:4px 8px;border-bottom:1px solid #0a3a3c;display:flex;justify-content:space-between;">
+            <span style="color:#00e5cc;font:bold 9px monospace;">PRODUCTION LINE α</span>
+            <span style="color:#00ff88;font:9px monospace;">● RUNNING</span>
+          </div>
+          <div style="padding:8px;font:9px monospace;color:#40c4b0;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#0a8a7c;">Recipe:</span><span style="color:#88ffe8;">Tritanium Plate</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#0a8a7c;">ETA:</span><span style="color:#e8c44a;">00:14:32</span>
+            </div>
+            <div style="background:#020a0c;border:1px solid #0a3a3c;height:8px;border-radius:1px;overflow:hidden;margin-top:4px;">
+              <div style="background:linear-gradient(90deg,#0a6a5c,#00e5cc);height:100%;width:72%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="color:#0a8a7c;">Jobs:</span><span>142</span>
+            </div>
+          </div>
+        </div>
+        <!-- Work Orders panel -->
+        <div style="background:#051214;border:1px solid #0a3a3c;border-radius:2px;">
+          <div style="background:#081a1c;padding:4px 8px;border-bottom:1px solid #0a3a3c;">
+            <span style="color:#00e5cc;font:bold 9px monospace;">WORK ORDERS</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;">
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #081a1c;">
+              <span style="color:#88ffe8;">WO-0042</span><span style="color:#00ff88;">ACCEPTED</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #081a1c;">
+              <span style="color:#88ffe8;">WO-0043</span><span style="color:#00e5cc;">OPEN</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;border-bottom:1px solid #081a1c;">
+              <span style="color:#88ffe8;">WO-0044</span><span style="color:#e8a82d;">DELIVERING</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:3px 4px;">
+              <span style="color:#88ffe8;">WO-0045</span><span style="color:#00ff88;">COMPLETED</span>
+            </div>
+          </div>
+        </div>
+        <!-- Trigger Engine panel -->
+        <div style="background:#051214;border:1px solid #0a3a3c;border-radius:2px;">
+          <div style="background:#081a1c;padding:4px 8px;border-bottom:1px solid #0a3a3c;">
+            <span style="color:#00e5cc;font:bold 9px monospace;">TRIGGER ENGINE</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;color:#40c4b0;">
+            <div style="margin-bottom:3px;"><span style="color:#ff4444;">▲ LOW STOCK</span> <span style="color:#0a8a7c;">Tritanium &lt; 10</span></div>
+            <div style="margin-bottom:3px;"><span style="color:#00ff88;">● COOLDOWN</span> <span style="color:#0a8a7c;">Auto-restock 04:21</span></div>
+            <div><span style="color:#e8c44a;">◆ PENDING</span> <span style="color:#0a8a7c;">Fleet damage eval</span></div>
+          </div>
+        </div>
+        <!-- Gas Pool panel -->
+        <div style="background:#051214;border:1px solid #0a3a3c;border-radius:2px;">
+          <div style="background:#081a1c;padding:4px 8px;border-bottom:1px solid #0a3a3c;">
+            <span style="color:#00e5cc;font:bold 9px monospace;">GAS POOL</span>
+          </div>
+          <div style="padding:6px;font:9px monospace;color:#40c4b0;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#0a8a7c;">Coins:</span><span>18/20</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#0a8a7c;">Balance:</span><span style="color:#00ff88;">2.41 SUI</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:#0a8a7c;">TX/hr:</span><span>34</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Cyan Neon</h3>
+      <p>Blackish-teal (#040d0f) + cyan borders (#0a3a3c) + neon teal highlights (#00e5cc). More futuristic/cyberpunk. High contrast, eye-catching.</p>
+    </div>
+  </div>
+</div>

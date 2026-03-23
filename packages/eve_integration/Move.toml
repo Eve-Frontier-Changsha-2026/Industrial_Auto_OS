@@ -1,0 +1,13 @@
+[package]
+name = "eve_integration"
+edition = "2024.beta"
+published-at = "0x7c43be07955afbef2ffa875858fd1666d4573d0b3a3051959e03fc19ff93bd02"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "072a2111619715c3348d1b83c0526c3bcfa5cdd1" }
+industrial_core = { local = "../industrial_core" }
+marketplace = { local = "../marketplace" }
+work_order = { local = "../work_order" }
+
+[addresses]
+eve_integration = "0x0"

@@ -1,0 +1,13 @@
+.container { display: flex; flex-direction: column; gap: 10px; }
+.btn { padding: 3px 8px; font-size: 9px; font-family: var(--font-mono); background: var(--bg-header); border: 1px solid var(--border); color: var(--accent); cursor: pointer; border-radius: 2px; }
+.btnDanger { border-color: var(--status-error); color: var(--status-error); }
+.btn:hover { background: var(--border); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.section { padding: 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; }
+.sectionTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+.formRow { display: flex; gap: 6px; align-items: center; }
+.label { font-size: 10px; color: var(--text-muted); min-width: 90px; }
+.input { flex: 1; padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.info { color: var(--text-secondary); font-size: 10px; line-height: 1.6; }
+.muted { color: var(--text-muted); font-size: 10px; font-style: italic; margin-bottom: 6px; }
+.result { padding: 6px; background: var(--bg-header); border: 1px solid var(--border); border-radius: 2px; font-size: 10px; font-family: var(--font-mono); color: var(--text-primary); margin-top: 6px; }

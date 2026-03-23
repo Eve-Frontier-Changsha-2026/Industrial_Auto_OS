@@ -1,6 +1,7 @@
 [package]
 name = "work_order"
 edition = "2024.beta"
+published-at = "0x7cef70f7839ee8a86fa5cc488e0aa6c241c126edb2b83e49c487e9cf8aadc029"
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "072a2111619715c3348d1b83c0526c3bcfa5cdd1" }

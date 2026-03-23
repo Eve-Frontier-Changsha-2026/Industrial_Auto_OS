@@ -43,6 +43,29 @@ const ERROR_MAP: Record<number, string> = {
   301: "Not lessor",
   302: "Lease not expired",
   303: "Lease inactive",
+  304: "Lease expired",
+  // EVE Bridge errors (1001-1007)
+  1001: "Not authorized — only factory owner can perform this action",
+  1002: "SSU is offline — cannot perform inventory operations",
+  1003: "Item mapping not found in registry",
+  1004: "EVE type ID does not exist in global registry",
+  1005: "Quantity overflow — value exceeds u32 max",
+  1006: "Item mapping is disabled for this factory",
+  1007: "Mapping already exists in global registry",
+  // Factory Access errors (2001-2013)
+  2001: "Recipe mismatch — BPO recipe does not match factory",
+  2002: "Lease is not active",
+  2003: "You are not the lessee",
+  2004: "Work order is not in active state",
+  2005: "You are not the work order acceptor",
+  2006: "You are not the pass holder",
+  2007: "Access pass has expired",
+  2008: "Pass has not yet expired — cannot revoke",
+  2009: "Factory mismatch",
+  2010: "Pass does not have an expiry — cannot expire-revoke",
+  2011: "You already have an active pass for this factory",
+  2012: "Access pass has been revoked by admin",
+  2013: "Not authorized — only factory owner",
 };
 
 export function humanError(code: number): string {

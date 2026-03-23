@@ -237,7 +237,7 @@ const STATUS_PAUSED: u8 = 2;
 public struct TriggerRule has key {
     id: UID,
     production_line_id: ID,
-    condition_type: u8,           // 0=inventory_below, 1=external_event, 2=schedule
+    condition_type: u8,           // 0=inventory_below, 1=inventory_above
     threshold: u64,
     target_item_type_id: u32,
     auto_repeat: bool,

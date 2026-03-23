@@ -14,6 +14,10 @@ import { LeaseManager } from "../panes/LeaseManager";
 import { WatcherStatus } from "../panes/WatcherStatus";
 import { TxLog } from "../panes/TxLog";
 import { TriggerEngine } from "../panes/TriggerEngine";
+import { SSUInventory } from "../panes/SSUInventory";
+import { GateAccess } from "../panes/GateAccess";
+import { ItemMapping } from "../panes/ItemMapping";
+import { LinkAssembly } from "../panes/LinkAssembly";
 
 export interface PaneDefinition {
   id: string;
@@ -21,7 +25,7 @@ export interface PaneDefinition {
   component: ComponentType;
   defaultSize: { w: number; h: number };
   minSize: { w: number; h: number };
-  category: "dashboard" | "production" | "blueprint" | "orders" | "market" | "watcher" | "trigger";
+  category: "dashboard" | "production" | "blueprint" | "orders" | "market" | "watcher" | "trigger" | "eve";
 }
 
 export const PANE_DEFS: PaneDefinition[] = [
@@ -40,6 +44,10 @@ export const PANE_DEFS: PaneDefinition[] = [
   { id: "watcher-status",      title: "Watcher Status",       component: WatcherStatus,      defaultSize: { w: 8, h: 8 },   minSize: { w: 6, h: 4 },  category: "watcher" },
   { id: "tx-log",              title: "TX Log",               component: TxLog,              defaultSize: { w: 10, h: 8 },  minSize: { w: 8, h: 4 },  category: "watcher" },
   { id: "trigger-engine",      title: "Trigger Engine",       component: TriggerEngine,      defaultSize: { w: 10, h: 8 },  minSize: { w: 8, h: 5 },  category: "trigger" },
+  { id: "ssu-inventory",       title: "SSU Inventory",        component: SSUInventory,       defaultSize: { w: 10, h: 8 },  minSize: { w: 8, h: 5 },  category: "eve" },
+  { id: "gate-access",         title: "Gate Access",          component: GateAccess,         defaultSize: { w: 12, h: 10 }, minSize: { w: 8, h: 6 },  category: "eve" },
+  { id: "item-mapping",        title: "Item Mapping",         component: ItemMapping,        defaultSize: { w: 10, h: 8 },  minSize: { w: 8, h: 5 },  category: "eve" },
+  { id: "link-assembly",       title: "Link Assembly",        component: LinkAssembly,       defaultSize: { w: 8, h: 6 },   minSize: { w: 6, h: 4 },  category: "eve" },
 ];
 
 export const PANE_MAP = new Map(PANE_DEFS.map((d) => [d.id, d]));

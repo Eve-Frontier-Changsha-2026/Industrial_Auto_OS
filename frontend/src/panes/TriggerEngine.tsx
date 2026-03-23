@@ -13,9 +13,8 @@ import { buildCreateTriggerRule, buildToggleTrigger } from "../lib/ptb/triggerEn
 import styles from "./TriggerEngine.module.css";
 
 const CONDITION_LABELS: Record<number, string> = {
-  [TRIGGER_CONDITION.OUTPUT_BUFFER_ABOVE]: "OUTPUT_BUFFER_ABOVE",
-  [TRIGGER_CONDITION.INPUT_BUFFER_BELOW]: "INPUT_BUFFER_BELOW",
-  [TRIGGER_CONDITION.FUEL_BELOW]: "FUEL_BELOW",
+  [TRIGGER_CONDITION.INVENTORY_BELOW]: "INVENTORY_BELOW",
+  [TRIGGER_CONDITION.INVENTORY_ABOVE]: "INVENTORY_ABOVE",
 };
 
 const LINE_IDS = (import.meta.env.VITE_PRODUCTION_LINE_IDS ?? "")
@@ -137,9 +136,8 @@ export function TriggerEngine() {
           <div className={styles.formRow}>
             <span className={styles.label}>Condition</span>
             <select className={styles.select} value={conditionType} onChange={(e) => setConditionType(Number(e.target.value))} disabled={!account}>
-              <option value={0}>OUTPUT_BUFFER_ABOVE</option>
-              <option value={1}>INPUT_BUFFER_BELOW</option>
-              <option value={2}>FUEL_BELOW</option>
+              <option value={0}>INVENTORY_BELOW</option>
+              <option value={1}>INVENTORY_ABOVE</option>
             </select>
           </div>
           <div className={styles.formRow}>

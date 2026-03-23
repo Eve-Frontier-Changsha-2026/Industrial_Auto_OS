@@ -1,0 +1,79 @@
+network: testnet
+
+package_ids:
+  industrial_core: "0xe5fa49b0e8cc82b12bf1e26627b9738e57e5431c9d8ccae1c5d8584fb4e5e0a8"
+  work_order: "0x7cef70f7839ee8a86fa5cc488e0aa6c241c126edb2b83e49c487e9cf8aadc029"
+  marketplace: "0xd03d666620eda91417bb3c3479c24dd62e58fc9b2988f5160586e11ba12dee58"
+
+signer:
+  type: single
+  keypath: ~/.sui/sui.keystore
+
+watch:
+  poll_interval_ms: 5000
+  production_line_ids: []
+  work_order_board_id: "0x36816fca3c2e3792acb87d62ce441d4f2192dd0f355521e8a80e0479d1e4cf84"
+  marketplace_id: "0x6b733e0a70b56a81b397c1e1fd7f39a9150923e9fb50f57b04b614418a455a97"
+  item_type_ids: [1, 2, 3]
+
+gas:
+  pool_size: 20
+  min_balance_warn: 100000000
+  min_coin_balance: 5000000
+  auto_replenish: true
+
+rules:
+  trigger_evaluator:
+    enabled: true
+    production_line_ids: []
+    trigger_rules: []
+  auto_restock:
+    enabled: false
+    threshold: 10
+    production_line_ids: []
+    recipe_id: ""
+    blueprint_id: ""
+  output_withdrawer:
+    enabled: true
+  order_acceptor:
+    enabled: true
+    max_escrow: 5000000000
+    recipe_ids: []
+  order_completer:
+    enabled: true
+  auto_complete:
+    enabled: true
+  expired_cleaner:
+    enabled: true
+  lease_forfeiter:
+    enabled: true
+  fleet_damage:
+    enabled: false
+    production_line_id: ""
+    recipe_id: ""
+    blueprint_id: ""
+  production_completer:
+    enabled: true
+  delivery_handler:
+    enabled: true
+  # EVE Integration rules
+  auto_produce_from_ssu:
+    enabled: false
+    ssu_id: ""
+  auto_collect_to_ssu:
+    enabled: false
+    ssu_id: ""
+  auto_grant_access:
+    enabled: true
+    access_registry_id: "0xf2072291de885fab816177a7944e10772ac134db71e67e3c3fb51c3be4cfe9c5"
+    production_line_id: ""
+  auto_revoke_access:
+    enabled: true
+    access_registry_id: "0xf2072291de885fab816177a7944e10772ac134db71e67e3c3fb51c3be4cfe9c5"
+  sync_registry:
+    enabled: true
+
+eve_integration:
+  eve_pkg_id: "0x7c43be07955afbef2ffa875858fd1666d4573d0b3a3051959e03fc19ff93bd02"
+  global_registry_id: "0x7f093253fb00026e890869ddb085ed72556db0f9b3473af938f325c64c2a6863"
+  access_registry_id: "0xf2072291de885fab816177a7944e10772ac134db71e67e3c3fb51c3be4cfe9c5"

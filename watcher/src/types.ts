@@ -68,6 +68,16 @@ export interface RuleConfig {
   [key: string]: unknown;
 }
 
+// ─── EVE Integration Types ─────────────────────
+export interface EveIntegrationConfig {
+  eve_pkg_id: string;
+  global_registry_id: string;
+  access_registry_id: string;
+  ssu_id?: string;
+  gate_source_id?: string;
+  gate_dest_id?: string;
+}
+
 // ─── Gas Pool Types ─────────────────────────────
 
 export interface GasCoinEntry {

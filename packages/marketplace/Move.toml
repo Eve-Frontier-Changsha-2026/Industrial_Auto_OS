@@ -1,6 +1,7 @@
 [package]
 name = "marketplace"
 edition = "2024.beta"
+published-at = "0xd03d666620eda91417bb3c3479c24dd62e58fc9b2988f5160586e11ba12dee58"
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "072a2111619715c3348d1b83c0526c3bcfa5cdd1" }

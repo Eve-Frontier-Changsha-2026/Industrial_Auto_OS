@@ -120,7 +120,37 @@ export const ORDER_PRIORITY_LABEL: Record<number, string> = {
 };
 
 export const TRIGGER_CONDITION = {
-  OUTPUT_BUFFER_ABOVE: 0,
-  INPUT_BUFFER_BELOW: 1,
-  FUEL_BELOW: 2,
+  INVENTORY_BELOW: 0,
+  INVENTORY_ABOVE: 1,
 } as const;
+
+// === EVE Integration Types ===
+export interface ItemMapping {
+  eveTypeId: string; // u64 as string
+  materialId: string;
+}
+
+export interface FactoryOverride {
+  factoryId: string;
+  disabledTypes: string[]; // eve_type_ids
+}
+
+export interface AccessPassData {
+  id: string;
+  factoryId: string;
+  holder: string;
+  passType: number; // 0=blueprint, 1=lease, 2=work_order
+  expiresAt: string | null; // epoch ms or null
+}
+
+export const PASS_TYPE = {
+  BLUEPRINT: 0,
+  LEASE: 1,
+  WORK_ORDER: 2,
+} as const;
+
+export const PASS_TYPE_LABEL: Record<number, string> = {
+  0: "Blueprint Holder",
+  1: "Lessee",
+  2: "Work Order",
+};

@@ -1,0 +1,4 @@
+{"type":"server-started","port":58441,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:58441","screen_dir":"/Users/ramonliao/Documents/Code/Project/Web3/Hackathon/2026_HoH_SUI_HackerHouse_Changsha/EVE_Frontier/build/projects/Industrial_Auto_OS/.superpowers/brainstorm/38051-1774081626"}
+{"type":"screen-added","file":"/Users/ramonliao/Documents/Code/Project/Web3/Hackathon/2026_HoH_SUI_HackerHouse_Changsha/EVE_Frontier/build/projects/Industrial_Auto_OS/.superpowers/brainstorm/38051-1774081626/visual-style.html"}
+{"type":"screen-added","file":"/Users/ramonliao/Documents/Code/Project/Web3/Hackathon/2026_HoH_SUI_HackerHouse_Changsha/EVE_Frontier/build/projects/Industrial_Auto_OS/.superpowers/brainstorm/38051-1774081626/waiting.html"}
+{"type":"server-stopped","reason":"idle timeout"}

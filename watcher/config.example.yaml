@@ -27,7 +27,12 @@ rules:
   trigger_evaluator:
     enabled: true
     production_line_ids: ["0x..."]
-    trigger_rule_ids: ["0x..."]
+    # Each trigger rule maps to a specific recipe + blueprint for execution
+    trigger_rules:
+      - rule_id: "0x..."
+        production_line_id: "0x..."
+        recipe_id: "0x..."
+        blueprint_id: "0x..."
   auto_restock:
     enabled: true
     threshold: 10
@@ -57,3 +62,28 @@ rules:
     enabled: true
   delivery_handler:
     enabled: true
+
+eve_integration:
+  eve_pkg_id: "0x_EVE_INTEGRATION_PKG"
+  global_registry_id: "0x_GLOBAL_REGISTRY"
+  access_registry_id: "0x_ACCESS_REGISTRY"
+  # ssu_id: "0x_SSU"
+  # gate_source_id: "0x_GATE1"
+  # gate_dest_id: "0x_GATE2"
+
+# EVE integration rules (add to rules section above):
+#   auto_produce_from_ssu:
+#     enabled: false
+#     ssu_id: "0x_SSU"
+#   auto_collect_to_ssu:
+#     enabled: false
+#     ssu_id: "0x_SSU"
+#   auto_grant_access:
+#     enabled: true
+#     access_registry_id: "0x_ACCESS_REGISTRY"
+#     production_line_id: "0x..."
+#   auto_revoke_access:
+#     enabled: true
+#     access_registry_id: "0x_ACCESS_REGISTRY"
+#   sync_registry:
+#     enabled: true

@@ -34,3 +34,18 @@ export function buildForfeitLease(pkg: string, leaseId: string): Transaction {
   });
   return tx;
 }
+
+export function buildStartProductionWithLease(
+  marketplacePkg: string, leaseId: string,
+  lineId: string, recipeId: string,
+): Transaction {
+  const tx = new Transaction();
+  tx.moveCall({
+    target: `${marketplacePkg}::lease::start_production_with_lease`,
+    arguments: [
+      tx.object(leaseId), tx.object(lineId),
+      tx.object(recipeId), tx.object(CLOCK_ID),
+    ],
+  });
+  return tx;
+}
