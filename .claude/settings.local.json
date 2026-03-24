@@ -44,7 +44,10 @@
       "Bash(gh api:*)",
       "Bash(curl -sL https://raw.githubusercontent.com/evefrontier/world-contracts/main/contracts/world/sources/assemblies/storage_unit.move)",
       "Bash(curl -sL https://raw.githubusercontent.com/evefrontier/world-contracts/main/contracts/world/sources/assemblies/gate.move)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)",
+      "Bash(vercel --version)"
     ]
   },
   "enabledPlugins": {

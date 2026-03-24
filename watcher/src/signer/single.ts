@@ -11,6 +11,25 @@ export class SingleKeypairProvider implements SignerProvider {
     this.keypair = keypair;
   }
 
+  /** Accept `suiprivkey1…` (Bech32) or raw base64 private key */
+  static fromPrivateKey(key: string): SingleKeypairProvider {
+    try {
+      const { schema, secretKey } = decodeSuiPrivateKey(key);
+      if (schema === "ED25519") {
+        return new SingleKeypairProvider(Ed25519Keypair.fromSecretKey(secretKey));
+      }
+      throw new Error(`Unsupported key scheme from Bech32: ${schema}`);
+    } catch (e) {
+      // Fallback: raw base64
+      const raw = Buffer.from(key, "base64");
+      const scheme = raw[0];
+      if (scheme === 0x00) {
+        return new SingleKeypairProvider(Ed25519Keypair.fromSecretKey(raw.subarray(1)));
+      }
+      throw new Error(`Cannot parse SUI_PRIVATE_KEY: ${(e as Error).message}`);
+    }
+  }
+
   static fromKeystoreFile(path: string): SingleKeypairProvider {
     const content = readFileSync(path, "utf-8");
     return SingleKeypairProvider.fromKeystoreContent(content);

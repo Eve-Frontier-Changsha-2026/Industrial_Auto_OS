@@ -39,7 +39,9 @@ async function main() {
   // ─── Infrastructure ──────────────────────────
   const client = new SuiClient({ url: getFullnodeUrl(config.network) });
   const db = createDb("watcher.db");
-  const signer = SingleKeypairProvider.fromKeystoreFile(config.signer.keypath);
+  const signer = process.env.SUI_PRIVATE_KEY
+    ? SingleKeypairProvider.fromPrivateKey(process.env.SUI_PRIVATE_KEY)
+    : SingleKeypairProvider.fromKeystoreFile(config.signer.keypath);
   const signers = await signer.listSigners();
   console.log(`Signer: ${signers[0].address}`);
 
