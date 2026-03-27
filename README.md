@@ -19,25 +19,25 @@ Industrial Auto OS is the **industrial logistics backbone** of the EVE Frontier 
 ```mermaid
 graph TB
     subgraph On-Chain ["On-Chain (Sui Move)"]
-        IC[industrial_core<br/>Recipe · Blueprint · ProductionLine · TriggerEngine]
-        WO[work_order<br/>WorkOrder lifecycle · Fleet Command bridge]
-        MP[marketplace<br/>BPO/BPC trading · Leasing]
+        IC["industrial_core<br/>Recipe · Blueprint · ProductionLine · TriggerEngine"]
+        WO["work_order<br/>WorkOrder lifecycle · Fleet Command bridge"]
+        MP["marketplace<br/>BPO/BPC trading · Leasing"]
         IC --> WO
         IC --> MP
     end
 
     subgraph Off-Chain ["Off-Chain Watcher (TypeScript)"]
-        EP[Event Poller<br/>cursor-based polling]
-        RE[Rule Engine<br/>11 handlers]
-        EX[TX Executor<br/>PTB builder · gas pool]
-        DB[(SQLite<br/>tx log · cursor)]
+        EP["Event Poller<br/>cursor-based polling"]
+        RE["Rule Engine<br/>11 handlers"]
+        EX["TX Executor<br/>PTB builder · gas pool"]
+        DB[("SQLite<br/>tx log · cursor")]
         EP --> RE --> EX
         EX --> DB
     end
 
     subgraph Frontend ["Frontend (React 18)"]
-        HUD[HUD Dashboard<br/>15 draggable panes]
-        DK[@mysten/dapp-kit<br/>wallet · queries]
+        HUD["HUD Dashboard<br/>15 draggable panes"]
+        DK["@mysten/dapp-kit<br/>wallet · queries"]
         HUD --> DK
     end
 
