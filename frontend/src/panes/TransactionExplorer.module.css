@@ -1,0 +1,26 @@
+.container { display: flex; flex-direction: column; gap: 8px; }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.input { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; flex: 1; min-width: 120px; }
+.input::placeholder { color: var(--text-muted); }
+.select { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.table th { text-align: left; padding: 4px 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+.table td { padding: 4px 6px; color: var(--text-secondary); border-bottom: 1px solid var(--bg-header); }
+.table tr:hover td { background: var(--bg-header); cursor: pointer; }
+.digest { font-family: var(--font-mono); font-size: 10px; color: var(--hud-amber); }
+.sender { font-family: var(--font-mono); font-size: 9px; }
+.pagination { display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 10px; }
+.pageBtn { padding: 2px 8px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; cursor: pointer; }
+.pageBtn:hover { border-color: var(--hud-amber); }
+.pageBtn:disabled { opacity: 0.3; cursor: default; }
+.pageInfo { color: var(--text-muted); }
+.expandedRow { background: var(--bg-header); }
+.moveCallsPanel { padding: 6px 8px; font-size: 10px; }
+.moveCallsTitle { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; }
+.moveCall { padding: 3px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: baseline; }
+.moveCall:last-child { border-bottom: none; }
+.mcTarget { font-family: var(--font-mono); font-size: 9px; color: var(--hud-amber); }
+.mcAction { font-size: 9px; color: var(--text-secondary); font-style: italic; }
+.unavailable { color: var(--status-error); font-size: 11px; padding: 8px; text-align: center; background: var(--bg-deep); border: 1px solid var(--status-error); border-radius: 2px; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }
+.loading { color: var(--text-muted); font-size: 10px; padding: 4px 0; }

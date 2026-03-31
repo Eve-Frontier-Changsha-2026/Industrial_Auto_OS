@@ -13,6 +13,7 @@ export const SHARED_OBJECTS = {
 } as const;
 
 export const WATCHER_URL = import.meta.env.VITE_WATCHER_URL ?? "http://localhost:3001";
+export const EVE_EYES_URL = import.meta.env.VITE_EVE_EYES_URL ?? "https://eve-eyes.d0v.xyz";
 
 export const CLOCK_ID = "0x6";
 

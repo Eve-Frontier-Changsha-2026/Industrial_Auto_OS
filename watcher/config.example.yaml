@@ -87,3 +87,7 @@ eve_integration:
 #     access_registry_id: "0x_ACCESS_REGISTRY"
 #   sync_registry:
 #     enabled: true
+
+eve_eyes:
+  base_url: https://eve-eyes.d0v.xyz
+  api_key: YOUR_EVE_EYES_API_KEY

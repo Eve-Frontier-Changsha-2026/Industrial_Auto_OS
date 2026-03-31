@@ -78,6 +78,12 @@ export interface EveIntegrationConfig {
   gate_dest_id?: string;
 }
 
+// ─── Eve Eyes API Types ──────────────────────────
+export interface EveEyesConfig {
+  base_url: string;
+  api_key: string;
+}
+
 // ─── Gas Pool Types ─────────────────────────────
 
 export interface GasCoinEntry {

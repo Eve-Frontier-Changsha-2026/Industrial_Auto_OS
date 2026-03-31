@@ -18,6 +18,9 @@ import { SSUInventory } from "../panes/SSUInventory";
 import { GateAccess } from "../panes/GateAccess";
 import { ItemMapping } from "../panes/ItemMapping";
 import { LinkAssembly } from "../panes/LinkAssembly";
+import { KillmailFeed } from "../panes/KillmailFeed";
+import { BuildingLeaderboard } from "../panes/BuildingLeaderboard";
+import { TransactionExplorer } from "../panes/TransactionExplorer";
 
 export interface PaneDefinition {
   id: string;
@@ -25,7 +28,7 @@ export interface PaneDefinition {
   component: ComponentType;
   defaultSize: { w: number; h: number };
   minSize: { w: number; h: number };
-  category: "dashboard" | "production" | "blueprint" | "orders" | "market" | "watcher" | "trigger" | "eve";
+  category: "dashboard" | "production" | "blueprint" | "orders" | "market" | "watcher" | "trigger" | "eve" | "intel";
 }
 
 export const PANE_DEFS: PaneDefinition[] = [
@@ -48,6 +51,9 @@ export const PANE_DEFS: PaneDefinition[] = [
   { id: "gate-access",         title: "Gate Access",          component: GateAccess,         defaultSize: { w: 12, h: 10 }, minSize: { w: 8, h: 6 },  category: "eve" },
   { id: "item-mapping",        title: "Item Mapping",         component: ItemMapping,        defaultSize: { w: 10, h: 8 },  minSize: { w: 8, h: 5 },  category: "eve" },
   { id: "link-assembly",       title: "Link Assembly",        component: LinkAssembly,       defaultSize: { w: 8, h: 6 },   minSize: { w: 6, h: 4 },  category: "eve" },
+  { id: "killmail-feed",        title: "Killmail Feed",        component: KillmailFeed,        defaultSize: { w: 8, h: 10 },  minSize: { w: 6, h: 6 },  category: "intel" },
+  { id: "building-leaderboard", title: "Building Leaderboard", component: BuildingLeaderboard, defaultSize: { w: 8, h: 10 },  minSize: { w: 6, h: 6 },  category: "intel" },
+  { id: "tx-explorer",          title: "Transaction Explorer",  component: TransactionExplorer,  defaultSize: { w: 12, h: 12 }, minSize: { w: 8, h: 8 },  category: "intel" },
 ];
 
 export const PANE_MAP = new Map(PANE_DEFS.map((d) => [d.id, d]));

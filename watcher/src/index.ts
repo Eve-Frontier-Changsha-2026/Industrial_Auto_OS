@@ -118,7 +118,8 @@ async function main() {
     res.setHeader("Access-Control-Allow-Origin", "*");
     next();
   });
-  apiApp.use("/", createApiRouter(db, registry));
+  const eveEyesConfig = (config as any).eve_eyes as import("./types.js").EveEyesConfig | undefined;
+  apiApp.use("/", createApiRouter(db, registry, eveEyesConfig));
   const apiPort = config.api?.port ?? 3001;
   apiApp.listen(apiPort, () => {
     console.log(`API server on http://localhost:${apiPort}`);

@@ -1,0 +1,14 @@
+.container { display: flex; flex-direction: column; gap: 8px; }
+.filters { display: flex; gap: 6px; align-items: center; }
+.select { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.table th { text-align: left; padding: 4px 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+.table td { padding: 4px 6px; color: var(--text-secondary); border-bottom: 1px solid var(--bg-header); }
+.table tr:hover td { background: var(--bg-header); }
+.rank { color: var(--hud-amber); font-weight: 600; text-align: center; width: 30px; }
+.owner { font-size: 10px; }
+.wallet { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); }
+.count { color: var(--hud-amber); font-weight: 600; text-align: right; }
+.unavailable { color: var(--status-error); font-size: 11px; padding: 8px; text-align: center; background: var(--bg-deep); border: 1px solid var(--status-error); border-radius: 2px; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }
+.refreshing { font-size: 9px; color: var(--hud-amber); opacity: 0.6; }

@@ -1,0 +1,16 @@
+.container { display: flex; flex-direction: column; gap: 8px; }
+.filters { display: flex; gap: 6px; align-items: center; }
+.select { padding: 3px 6px; font-size: 10px; font-family: var(--font-mono); background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-primary); border-radius: 2px; }
+.list { display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+.row { display: flex; align-items: center; gap: 8px; padding: 5px 8px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; font-size: 10px; }
+.row:hover { border-color: var(--hud-amber); }
+.timestamp { flex: 0 0 110px; color: var(--text-muted); font-family: var(--font-mono); font-size: 9px; }
+.killer { color: var(--status-error); font-weight: 600; }
+.vs { color: var(--text-muted); font-size: 9px; }
+.victim { color: var(--text-secondary); }
+.statusTag { margin-left: auto; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; padding: 1px 4px; border-radius: 2px; border: 1px solid var(--border); }
+.statusResolved { color: var(--status-ok); border-color: var(--status-ok); }
+.statusPending { color: var(--hud-amber); border-color: var(--hud-amber); }
+.unavailable { color: var(--status-error); font-size: 11px; padding: 8px; text-align: center; background: var(--bg-deep); border: 1px solid var(--status-error); border-radius: 2px; }
+.empty { color: var(--text-muted); font-size: 11px; padding: 8px 0; }
+.refreshing { font-size: 9px; color: var(--hud-amber); opacity: 0.6; }

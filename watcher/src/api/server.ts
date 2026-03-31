@@ -1,6 +1,8 @@
 import { Router } from "express";
 import type { Database } from "better-sqlite3";
 import type { RuleRegistry } from "../rules/registry.js";
+import { createEveEyesProxy } from "./eve-eyes-proxy.js";
+import type { EveEyesConfig } from "../types.js";
 
 const startTime = Date.now();
 let lastPollTimestamp = Date.now();
@@ -9,7 +11,11 @@ export function updateLastPoll(): void {
   lastPollTimestamp = Date.now();
 }
 
-export function createApiRouter(db: Database, registry: RuleRegistry): Router {
+export function createApiRouter(
+  db: Database,
+  registry: RuleRegistry,
+  eveEyesConfig?: EveEyesConfig,
+): Router {
   const router = Router();
 
   router.get("/health", (_req, res) => {
@@ -54,6 +60,10 @@ export function createApiRouter(db: Database, registry: RuleRegistry): Router {
     const transactions = db.prepare(sql).all(...params);
     res.json({ transactions, total: transactions.length });
   });
+
+  if (eveEyesConfig) {
+    router.use("/eve-eyes", createEveEyesProxy(eveEyesConfig));
+  }
 
   return router;
 }
