@@ -23,6 +23,27 @@
 
 ## 進度日誌
 
+### 2026-04-01 — 專案 Logo 設計完稿 (EVE Frontier & SUI 概念融合)
+
+#### 做了什麼
+- 閱讀並分析了 `README.md` 的專案理念：「Industrial Auto OS」（可程式化工廠、核心與衛星架構、Amber HUD 介面）。
+- 梳理 EVE Frontier (太空工業、重機具、Amber 介面) 與 SUI (水流、資料管線、藍綠色調) 的核心視覺元素。
+- 使用 AI 圖片生成工具建立極簡風格的向量 logo 圖像。
+- 透過 `uv` 與 Python `rembg[cpu,cli]` 執行高精度去背。
+- 已將去背後的 Logo `logo.png` 存放至 `docs/images/` 目錄中供前端與文件引用。
+
+#### 決策原因
+- **去背處理**：配合前端深色 Amber HUD Theme 視覺設計，確保 Logo 完美融入儀表板。
+- **視覺符號**：主體為星際工廠與齒輪，代表「自動化工廠作業系統」；右測延伸出的液態資料流則代表 SUI 的藍綠水系能量，象徵鏈上資料的流動與高效處理。
+
+#### 更動檔案
+- [NEW] `docs/images/logo.png`
+
+#### 尚未完成的 TODO
+- Phase 2: work_order package 開發
+- 將 Logo 與前端 React Dashboard 進行整合
+
+---
 ### 2026-03-20 — Phase 1: industrial_core 完成 (Tasks 1-5)
 
 #### 做了什麼

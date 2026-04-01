@@ -114,8 +114,17 @@ async function main() {
 
   // ─── REST API ────────────────────────────────
   const apiApp = express();
-  apiApp.use((_req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? "http://localhost:5173")
+    .split(",")
+    .map((o) => o.trim());
+  apiApp.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && allowedOrigins.includes(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") return res.sendStatus(204);
     next();
   });
   const eveEyesConfig = (config as any).eve_eyes as import("./types.js").EveEyesConfig | undefined;

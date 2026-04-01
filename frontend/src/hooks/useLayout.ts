@@ -8,11 +8,26 @@ export function saveLayout(layout: LayoutItem[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(layout));
 }
 
+function isLayoutArray(data: unknown): data is LayoutItem[] {
+  if (!Array.isArray(data) || data.length === 0) return false;
+  return data.every(
+    (item) =>
+      item !== null &&
+      typeof item === "object" &&
+      typeof (item as any).i === "string" &&
+      typeof (item as any).x === "number" &&
+      typeof (item as any).y === "number" &&
+      typeof (item as any).w === "number" &&
+      typeof (item as any).h === "number",
+  );
+}
+
 export function loadLayout(): LayoutItem[] | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as LayoutItem[];
+    const parsed = JSON.parse(raw);
+    return isLayoutArray(parsed) ? parsed : null;
   } catch {
     return null;
   }

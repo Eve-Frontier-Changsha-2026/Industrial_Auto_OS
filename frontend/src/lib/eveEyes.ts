@@ -55,7 +55,11 @@ async function fetchJson<T>(url: string): Promise<T> {
   if (!res.ok) {
     throw new Error(`Eve Eyes API: ${res.status} ${res.statusText}`);
   }
-  return res.json();
+  const data = await res.json();
+  if (data === null || typeof data !== "object") {
+    throw new Error("Eve Eyes API: unexpected response shape");
+  }
+  return data as T;
 }
 
 function qs(params: Record<string, string | number | undefined>): string {
@@ -68,20 +72,22 @@ function qs(params: Record<string, string | number | undefined>): string {
 
 // ─── Public Endpoints (direct) ──────────────
 
-export function fetchKillmails(params?: {
+export async function fetchKillmails(params?: {
   limit?: number;
   status?: string;
 }): Promise<{ items: Killmail[] }> {
   const q = qs({ limit: params?.limit, status: params?.status });
-  return fetchJson(`${EVE_EYES_URL}/api/indexer/killmails${q ? `?${q}` : ""}`);
+  const data = await fetchJson<{ items?: unknown }>(`${EVE_EYES_URL}/api/indexer/killmails${q ? `?${q}` : ""}`);
+  return { items: Array.isArray(data.items) ? data.items : [] };
 }
 
-export function fetchBuildingLeaderboard(params?: {
+export async function fetchBuildingLeaderboard(params?: {
   limit?: number;
   moduleName?: string;
 }): Promise<{ leaderboard: LeaderboardEntry[] }> {
   const q = qs({ limit: params?.limit, moduleName: params?.moduleName });
-  return fetchJson(`${EVE_EYES_URL}/api/v1/indexer/building-leaderboard${q ? `?${q}` : ""}`);
+  const data = await fetchJson<{ leaderboard?: unknown }>(`${EVE_EYES_URL}/api/v1/indexer/building-leaderboard${q ? `?${q}` : ""}`);
+  return { leaderboard: Array.isArray(data.leaderboard) ? data.leaderboard : [] };
 }
 
 export function fetchTransactionBlockDetail(
@@ -113,7 +119,7 @@ export function fetchModuleCallCounts(): Promise<{ modules: unknown[] }> {
 
 // ─── Proxied Endpoints (through watcher) ────
 
-export function fetchTransactionBlocks(params: {
+export async function fetchTransactionBlocks(params: {
   page?: number;
   pageSize?: number;
   senderAddress?: string;
@@ -130,10 +136,14 @@ export function fetchTransactionBlocks(params: {
     status: params.status,
     digest: params.digest,
   });
-  return fetchJson(`${base}/transaction-blocks?${q}`);
+  const data = await fetchJson<{ items?: unknown; pagination?: unknown }>(`${base}/transaction-blocks?${q}`);
+  return {
+    items: Array.isArray(data.items) ? data.items : [],
+    pagination: data.pagination as PaginatedResponse<TransactionBlock>["pagination"],
+  };
 }
 
-export function fetchMoveCalls(params: {
+export async function fetchMoveCalls(params: {
   page?: number;
   pageSize?: number;
   packageId?: string;
@@ -149,5 +159,9 @@ export function fetchMoveCalls(params: {
     moduleName: params.moduleName,
     functionName: params.functionName,
   });
-  return fetchJson(`${base}/move-calls?${q}`);
+  const data = await fetchJson<{ items?: unknown; pagination?: unknown }>(`${base}/move-calls?${q}`);
+  return {
+    items: Array.isArray(data.items) ? data.items : [],
+    pagination: data.pagination as PaginatedResponse<MoveCallItem>["pagination"],
+  };
 }

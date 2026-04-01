@@ -5,7 +5,7 @@ import { useToast } from "../hooks/useToast";
 import { humanError } from "../lib/errors";
 import { PACKAGE_IDS, SHARED_OBJECTS, TYPE_STRINGS } from "../lib/constants";
 import { PASS_TYPE_LABEL } from "../lib/types";
-import { truncateAddress, formatTimestamp } from "../lib/format";
+import { truncateAddress, formatTimestamp, isValidSuiId } from "../lib/format";
 import { StatusBadge } from "../components/StatusBadge";
 import {
   buildClaimFromBlueprint,
@@ -86,6 +86,10 @@ export function GateAccess() {
 
   function handleClaim() {
     if (!sourceId || !lineId) return;
+    if (!isValidSuiId(sourceId) || !isValidSuiId(lineId)) {
+      addToast("Invalid object ID format (expected 0x...)", "error");
+      return;
+    }
     let tx;
     switch (claimType) {
       case "blueprint":

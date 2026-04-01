@@ -1,6 +1,6 @@
 import { Transaction } from "@mysten/sui/transactions";
 
-export function buildListBpo(pkg: string, marketId: string, bpoId: string, price: number): Transaction {
+export function buildListBpo(pkg: string, marketId: string, bpoId: string, price: bigint): Transaction {
   const tx = new Transaction();
   tx.moveCall({
     target: `${pkg}::marketplace::list_bpo`,
@@ -29,7 +29,7 @@ export function buildBuyBpo(pkg: string, marketId: string, listingId: string, pr
   return tx;
 }
 
-export function buildListBpc(pkg: string, marketId: string, bpcId: string, price: number): Transaction {
+export function buildListBpc(pkg: string, marketId: string, bpcId: string, price: bigint): Transaction {
   const tx = new Transaction();
   tx.moveCall({
     target: `${pkg}::marketplace::list_bpc`,

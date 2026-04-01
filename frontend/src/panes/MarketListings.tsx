@@ -62,7 +62,9 @@ export function MarketListings() {
 
   function handleListBpo() {
     if (!listId || !listPrice) return;
-    const tx = buildListBpo(pkg, mkt, listId, Number(listPrice));
+    let priceBigint: bigint;
+    try { priceBigint = BigInt(listPrice); } catch { addToast("Invalid price", "error"); return; }
+    const tx = buildListBpo(pkg, mkt, listId, priceBigint);
     signAndExecute({ transaction: tx }, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["market-bpo-listings"] });
@@ -107,7 +109,9 @@ export function MarketListings() {
 
   function handleListBpc() {
     if (!listId || !listPrice) return;
-    const tx = buildListBpc(pkg, mkt, listId, Number(listPrice));
+    let priceBigint: bigint;
+    try { priceBigint = BigInt(listPrice); } catch { addToast("Invalid price", "error"); return; }
+    const tx = buildListBpc(pkg, mkt, listId, priceBigint);
     signAndExecute({ transaction: tx }, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["market-bpc-listings"] });

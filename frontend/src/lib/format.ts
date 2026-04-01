@@ -1,14 +1,22 @@
 const MIST_PER_SUI = 1_000_000_000n;
 
+/** Validates a SUI address or object ID: 0x + 1-64 hex chars */
+const SUI_ID_RE = /^0x[0-9a-fA-F]{1,64}$/;
+
+export function isValidSuiId(id: string): boolean {
+  return SUI_ID_RE.test(id);
+}
+
 export function truncateAddress(addr: string, chars = 4): string {
   if (addr.length <= chars * 2 + 4) return addr;
   return `${addr.slice(0, chars + 2)}...${addr.slice(-chars)}`;
 }
 
 export function formatSui(mist: bigint | number): string {
-  const val = typeof mist === "number" ? BigInt(mist) : mist;
-  const whole = val / MIST_PER_SUI;
-  const frac = val % MIST_PER_SUI;
+  const raw = typeof mist === "number" ? BigInt(mist) : mist;
+  if (raw < 0n) return "0.000";
+  const whole = raw / MIST_PER_SUI;
+  const frac = raw % MIST_PER_SUI;
   const fracStr = frac.toString().padStart(9, "0").slice(0, 3);
   return `${whole}.${fracStr}`;
 }

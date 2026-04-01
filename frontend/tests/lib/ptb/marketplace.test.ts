@@ -21,12 +21,12 @@ describe("marketplace PTBs", () => {
   });
 
   it("buildListBpo builds valid tx", () => {
-    const tx = buildListBpo(PKG, "0xMARKET", "0xBPO", 1000);
+    const tx = buildListBpo(PKG, "0xMARKET", "0xBPO", 1000n);
     expect(tx).toBeInstanceOf(Transaction);
   });
 
   it("buildListBpc builds valid tx", () => {
-    const tx = buildListBpc(PKG, "0xMARKET", "0xBPC", 500);
+    const tx = buildListBpc(PKG, "0xMARKET", "0xBPC", 500n);
     expect(tx).toBeInstanceOf(Transaction);
   });
 

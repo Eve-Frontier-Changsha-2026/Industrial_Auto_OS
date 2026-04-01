@@ -3,7 +3,7 @@ import { useSignAndExecuteTransaction, useCurrentAccount } from "@mysten/dapp-ki
 import { useQueryClient } from "@tanstack/react-query";
 import { useLeases } from "../hooks/useLeases";
 import { useBlueprints } from "../hooks/useBlueprints";
-import { formatSui, formatTimestamp, formatDuration, truncateAddress } from "../lib/format";
+import { formatSui, formatTimestamp, formatDuration, truncateAddress, isValidSuiId } from "../lib/format";
 import { PACKAGE_IDS } from "../lib/constants";
 import { useToast } from "../hooks/useToast";
 import { humanError } from "../lib/errors";
@@ -59,6 +59,10 @@ export function LeaseManager() {
 
   function handleCreate() {
     if (!bpoId || !lessee || !deposit || !expiryDays || !dailyRate) return;
+    if (!isValidSuiId(lessee)) {
+      addToast("Invalid lessee address (expected 0x...)", "error");
+      return;
+    }
     const depositMist = BigInt(Math.floor(Number(deposit) * 1e9));
     const expiryMs = Date.now() + Number(expiryDays) * 86_400_000;
     const tx = buildCreateLease(pkg, bpoId, lessee, depositMist, expiryMs, Number(dailyRate));
